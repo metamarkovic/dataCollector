@@ -9,7 +9,7 @@ import xml.etree.cElementTree as ET
 
 listing = glob.glob('../EC14-Exp-10*')
 td = TraceDistance()
-with open('diseaseData.csv', 'a') as csvfile:
+with open('diseaseData.csv', 'w') as csvfile:
     fieldnames = ['Ind_ID', 'Exp_Num', 'probability','euclideanStep', 'manhattanStep', 'euclideanTotal','manhattanTotal', 'lifetime_size', 'totalMuscles','totalFat','totalBone']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
