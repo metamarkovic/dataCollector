@@ -31,6 +31,7 @@ class DistanceCalc:
             firstLine = []
             lastLine = []
             lineSplit = []
+            goodline = None
             for line in inputFile:
                 lineSplit = line.split("\t")
                 if len(lineSplit) != 5 or str(float(lineSplit[2])) != str(lineSplit[2]):
@@ -44,6 +45,8 @@ class DistanceCalc:
                     pass
                 firstRun = False
 
+            if goodline is None:
+                return 0
             lastLine = goodline
             x_diff = float(firstLine[2]) - float(lastLine[2])
             y_diff = float(firstLine[3]) - float(lastLine[3])
