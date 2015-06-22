@@ -7,12 +7,13 @@ import glob
 import xml.etree.cElementTree as ET
 
 
-listing = glob.glob('./EC14-Exp-10*')
+listing = glob.glob('../EC14-Exp-10*')
 td = TraceDistance()
 with open('diseaseData.csv', 'a') as csvfile:
     fieldnames = ['Ind_ID', 'Exp_Num', 'probability','euclideanStep', 'manhattanStep', 'euclideanTotal','manhattanTotal', 'lifetime_size', 'totalMuscles','totalFat','totalBone']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
+
 print listing
 for nestFile in listing:
     print nestFile
@@ -22,7 +23,7 @@ for nestFile in listing:
 
 
     for filename in popListing:
-        indNumber = filename[26:-8]
+        indNumber = filename[27:-8]
         print filename
 
         print indNumber # Testing
