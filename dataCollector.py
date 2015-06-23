@@ -64,7 +64,7 @@ for nestFile in listing:
             probability = 'NA'
 
             print indNumber + "_vox.vxa file missing in /population/ of experiment " + experimentNumber
-            continue
+            pass
 
         filename2 = filename[:26] + '_beforePL/' + indNumber + filename[-8:]
         try:
@@ -85,6 +85,11 @@ for nestFile in listing:
             count_active2 = dna2.count('3') + dna2.count('4')
             count_length2 = count_empty2 + count_soft2 + count_hard2 + count_active2
 
+
+            print probability
+            print "after: " + str(count_soft2)
+            print "before: " + str(count_soft)
+
             if dna_length2 != count_length2:
                 count_empty2 = 'NA'
                 count_soft2 = 'NA'
@@ -97,7 +102,7 @@ for nestFile in listing:
             count_empty2 = 'NA'
             count_soft2 = 'NA'
             print indNumber + "_vox.vxa file missing in /population_beforePL/ of experiment " + experimentNumber
-            continue
+            pass
 
 
         traceFilename = os.path.abspath(nestFile + "/traces_afterPP/" + indNumber + ".trace")
