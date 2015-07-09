@@ -6,11 +6,24 @@ setwd("/Users/meta/Documents/dev/masterProject/masterdata/")
 # Extract data from .csv file
 # pd = read.csv("~/Documents/dev/thePlague/plagueDistances.csv", sep=",", dec=".")
 raw_data <- read.csv("F:/corvax/masterProject/masterData/diseaseData.csv", sep=",", dec=".", stringsAsFactors=FALSE)
-
 ddata = raw_data[complete.cases(raw_data),]
 ddata = na.omit(ddata)
 
+
+mutatedNormalsData <- read.csv("F:/corvax/masterProject/masterData/masterData/dataCollector/mutatedNormalsData.csv")
+mndata = mutatedNormalsData[,-13]
+mndata = mndata[,-13]
+mndata = mndata[complete.cases(mndata),]
+mndata = na.omit(mndata)
+
+robotData <- read.csv("F:/corvax/masterProject/masterData/masterData/dataCollector/robotData.csv")
+rdata = raw_data[complete.cases(robotData),]
+rdata = na.omit(rdata)
+
+
+
 # Extract vectors
+
 birth = as.numeric(ddata$birthtime)
 fat = ddata$totalFat
 fat_orig = ddata$originalFat
@@ -66,6 +79,7 @@ abline(lm(muscles~birth), col="green")
 abline(lm(muscles_orig~birth), col="blue")
 lm(muscles~birth)
 lm(muscles_orig~birth)
+
 
 plot(birth, muscles_orig, type="p", main="Number of muscles before mutation", 
      xlab="birth ", ylab="muscles ", pch=1)
@@ -198,9 +212,104 @@ mean(last$euclideanTotal, na.rm = TRUE)
 mean(first$manhattanTotal, na.rm = TRUE)
 mean(last$manhattanTotal, na.rm = TRUE)
 
+####################### QUANTILE MEANS PER EXPERIMENT ##################
+
+exp_2$birthtime = as.numeric(exp_2$birthtime)
+
+quantile(exp_2$birthtime)
+
+Exp2_ES_low = exp_2[exp_2$birthtime < 4.823227,]
+Exp2_ES_high = exp_2[exp_2$birthtime > 18.429829,]
+
+exp_3$birthtime = as.numeric(exp_3$birthtime)
+
+quantile(exp_3$birthtime)
+
+Exp3_ES_low = exp_3[exp_3$birthtime < 5.279479,]
+Exp3_ES_high = exp_3[exp_3$birthtime > 22.051905,]
+
+exp_4$birthtime = as.numeric(exp_4$birthtime)
+
+quantile(exp_4$birthtime)
+
+Exp4_ES_low = exp_4[exp_4$birthtime < 3.639266,]
+Exp4_ES_high = exp_4[exp_4$birthtime > 10.522429,]
+
+exp_5$birthtime = as.numeric(exp_5$birthtime)
+
+quantile(na.omit(exp_5$birthtime))
+
+Exp5_ES_low = exp_5[exp_5$birthtime < 3.44946,]
+Exp5_ES_high = exp_5[exp_5$birthtime > 16.01392,]
+
+exp_6$birthtime = as.numeric(exp_6$birthtime)
+
+quantile(na.omit(exp_6$birthtime))
+
+Exp6_ES_low = exp_6[exp_6$birthtime < 3.406485,]
+Exp6_ES_high = exp_6[exp_6$birthtime > 9.073455,]
+
+mean(Exp2_ES_low$euclideanStep)
+mean(Exp2_ES_high$euclideanStep)
+
+mean(Exp3_ES_low$euclideanStep)
+mean(Exp3_ES_high$euclideanStep)
+
+mean(Exp4_ES_low$euclideanStep)
+mean(Exp4_ES_high$euclideanStep)
+
+mean(Exp5_ES_low$euclideanStep)
+mean(Exp5_ES_high$euclideanStep)
+
+mean(Exp6_ES_low$euclideanStep)
+mean(Exp6_ES_high$euclideanStep)
+
+mean(Exp2_ES_low$originalEuclideanStep, na.rm = TRUE)
+mean(Exp2_ES_high$originalEuclideanStep, na.rm = TRUE)
+
+mean(Exp3_ES_low$originalEuclideanStep, na.rm = TRUE)
+mean(Exp3_ES_high$originalEuclideanStep, na.rm = TRUE)
+
+mean(Exp4_ES_low$originalEuclideanStep, na.rm = TRUE)
+mean(Exp4_ES_high$originalEuclideanStep, na.rm = TRUE)
+
+mean(Exp5_ES_low$originalEuclideanStep, na.rm = TRUE)
+mean(Exp5_ES_high$originalEuclideanStep, na.rm = TRUE)
+
+mean(Exp6_ES_low$originalEuclideanStep, na.rm = TRUE)
+mean(Exp6_ES_high$originalEuclideanStep, na.rm = TRUE)
 
 
-
+# exp_3[exp_3$Ind_ID == '1984',]#
+# exp_3[exp_3$Ind_ID == '1904',]# and 1919 as the second parent
+# exp_3[exp_3$Ind_ID == '1713',] #
+# exp_3[exp_3$Ind_ID == '1518',]
+# exp_3[exp_3$Ind_ID == '1423',]#
+# exp_3[exp_3$Ind_ID == '1354',]
+# exp_3[exp_3$Ind_ID == '1284',]#
+# exp_3[exp_3$Ind_ID == '1152',]
+# exp_3[exp_3$Ind_ID == '1081',] #
+# exp_3[exp_3$Ind_ID == '985',]
+# exp_3[exp_3$Ind_ID == '705',]#
+# exp_3[exp_3$Ind_ID == '591',]
+# exp_3[exp_3$Ind_ID == '175',] #
+# exp_3[exp_3$Ind_ID == '75',] #
+#        
+# # max: 1984
+# # parents: [1919, 1904]   picked: 1904
+# # parents: [1837, 1713]   picked: 1713
+# # parents: [1645, 1518]   picked: 1518
+# # parents: [1448, 1423]   picked: 1423
+# # parents: [1354, 1243]   picked: 1354
+# # parents: [1285, 1284]   picked: 1284
+# # parents: [1215, 1152]   picked: 1152
+# # parents: [1081, 1069]   picked: 1081
+# # parents: [995, 985]   picked: 985
+# # parents: [884, 705]   picked: 705
+# # parents: [607, 591]   picked: 591
+# # parents: [493, 274]   picked: 274
+# # parents: [175, 103]   picked: 175
+# # parents: [75, 65]   picked: 75
 
 
 
