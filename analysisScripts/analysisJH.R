@@ -1,7 +1,7 @@
 ########################## IMPORT DATA ##########################
 
 # Set working directory
-setwd("/Users/meta/Documents/dev/masterProject/masterdata/")
+setwd("F:/corvax/masterProject/masterData/masterData/dataCollector")
 
 # Extract data from .csv file
 # pd = read.csv("~/Documents/dev/thePlague/plagueDistances.csv", sep=",", dec=".")
@@ -137,6 +137,17 @@ exp_4 = ddata[ddata$Exp_Num == '4',]
 exp_5 = ddata[ddata$Exp_Num == '5',]
 exp_6 = ddata[ddata$Exp_Num == '6',]
 
+plot(exp_2$birth, exp_2$ES_distance, type="p", main="Total distance travelled over time", 
+     xlab="probability ", ylab="distance", pch=1)
+points(exp_3$birth, exp_3$ES_distance, type="p", col=2)
+points(exp_4$birth, exp_4$ES_distance, type="p", col=3)
+points(exp_5$birth, exp_5$ES_distance, type="p", col=4)
+points(exp_6$birth, exp_6$ES_distance, type="p", col=5)
+
+
+abline(lm(ET_distance~probability), col="blue")
+abline(lm(MT_distance~probability),col="green")
+
 ########################## LOWESS MODELS ############################
 
 
@@ -258,11 +269,11 @@ mean(Exp3_ES_high$euclideanStep)
 mean(Exp4_ES_low$euclideanStep)
 mean(Exp4_ES_high$euclideanStep)
 
-mean(Exp5_ES_low$euclideanStep)
-mean(Exp5_ES_high$euclideanStep)
+mean(Exp5_ES_low$euclideanStep, na.rm = TRUE)
+mean(Exp5_ES_high$euclideanStep, na.rm = TRUE)
 
-mean(Exp6_ES_low$euclideanStep)
-mean(Exp6_ES_high$euclideanStep)
+mean(Exp6_ES_low$euclideanStep, na.rm = TRUE)
+mean(Exp6_ES_high$euclideanStep, na.rm = TRUE)
 
 mean(Exp2_ES_low$originalEuclideanStep, na.rm = TRUE)
 mean(Exp2_ES_high$originalEuclideanStep, na.rm = TRUE)
@@ -279,6 +290,46 @@ mean(Exp5_ES_high$originalEuclideanStep, na.rm = TRUE)
 mean(Exp6_ES_low$originalEuclideanStep, na.rm = TRUE)
 mean(Exp6_ES_high$originalEuclideanStep, na.rm = TRUE)
 
+##################### JOHANN QUANTILES #####################
+JHexp_7 = rdata[rdata$probability == '0.07',]
+JHexp_8 = rdata[rdata$probability == '0.08',]
+
+JHexp_7$Ind_ID = as.integer(JHexp_7$Ind_ID)
+JHexp_8$Ind_ID = as.integer(JHexp_8$Ind_ID)
+
+quantile(na.omit(JHexp_7$Ind_ID))
+
+JHExp7_ES_low = subset(JHexp_7, Ind_ID < 538.75 & Ind_ID > 69.00)
+JHExp7_ES_high = subset(JHexp_7, Ind_ID < 1699.00 & Ind_ID > 978.00)
+
+quantile(na.omit(JHexp_8$Ind_ID))
+
+JHExp8_ES_low = subset(JHexp_8, Ind_ID < 304.25 & Ind_ID > 94.00)
+JHExp8_ES_high = subset(JHexp_8, Ind_ID < 1520.00 & Ind_ID > 930.75)
+
+mean(JHExp7_ES_low$euclideanStep, na.rm = TRUE)
+mean(JHExp7_ES_high$euclideanStep, na.rm = TRUE)
+
+mean(JHExp8_ES_low$euclideanStep, na.rm = TRUE)
+mean(JHExp8_ES_high$euclideanStep, na.rm = TRUE)
+
+mnexp_7 = mndata[mndata$Exp_Num == '7',]
+mnexp_8 = mndata[mndata$Exp_Num == '8',]
+
+quantile(na.omit(mnexp_7$Ind_ID))
+quantile(na.omit(mnexp_8$Ind_ID))
+
+mnExp7_ES_low = subset(JHexp_7, Ind_ID < 538.75 & Ind_ID > 69.00)
+mnExp7_ES_high = subset(JHexp_7, Ind_ID < 1699.00 & Ind_ID > 978.00)
+
+mnExp8_ES_low = subset(JHexp_8, Ind_ID < 304.25 & Ind_ID > 94.00)
+mnExp8_ES_high = subset(JHexp_8, Ind_ID < 1520.00 & Ind_ID > 930.75)
+
+mean(mnExp7_ES_low$euclideanStep, na.rm = TRUE)
+mean(mnExp7_ES_high$euclideanStep, na.rm = TRUE)
+
+mean(mnExp8_ES_low$euclideanStep, na.rm = TRUE)
+mean(mnExp8_ES_high$euclideanStep, na.rm = TRUE)
 
 # exp_3[exp_3$Ind_ID == '1984',]#
 # exp_3[exp_3$Ind_ID == '1904',]# and 1919 as the second parent
