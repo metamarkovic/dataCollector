@@ -7,9 +7,11 @@ setwd("/Users/meta/Documents/dev/masterProject/masterdata/")
 # pd = read.csv("~/Documents/dev/thePlague/plagueDistances.csv", sep=",", dec=".")
 raw_data <- read.csv("F:/corvax/masterProject/masterData/diseaseData.csv", sep=",", dec=".", stringsAsFactors=FALSE)
 
-ddata = na.omit(raw_data)
+ddata = raw_data[complete.cases(raw_data),]
+ddata = na.omit(ddata)
 
 # Extract vectors
+birth = as.numeric(ddata$birthtime)
 fat = ddata$totalFat
 fat_orig = ddata$originalFat
 muscles = ddata$totalMuscles
@@ -26,6 +28,7 @@ MT_distance = ddata$manhattanTotal
 lifetime = ddata$lifetime
 probability = ddata$probability
 
+expNum = ddata$Exp_Num
 
 bone_diff = bone_orig - bone
 muscle_diff = muscles_orig - muscles
@@ -52,37 +55,42 @@ median(fat_orig, na.rm = TRUE)
 ########################## DESCRIPTIVE GRAPHS ##########################
 
 # Scatter plots
-plot(ID, fat, main="Number of fat voxels over time", 
-     xlab="ID ", ylab="fat ", pch=1)
-abline(lm(fat~ID), col="red")
+plot(birth, fat, main="Number of fat voxels over time", 
+     xlab="birth ", ylab="fat ", pch=1)
+abline(lm(fat~birth), col="red")
+lm(fat~birth)
 
-plot(ID, muscles, type="p", main="Number of muscles after mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(muscles~ID), col="green")
+plot(birth, muscles, type="p", main="Number of muscles after mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(muscles~birth), col="green")
+abline(lm(muscles_orig~birth), col="blue")
+lm(muscles~birth)
+lm(muscles_orig~birth)
 
-plot(ID, muscles_orig, type="p", main="Number of muscles before mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(muscles_orig~ID), col="blue")
+plot(birth, muscles_orig, type="p", main="Number of muscles before mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(muscles_orig~birth), col="blue")
 
-plot(ID, bone, main="Number of bones after mutation", 
-     xlab="ID ", ylab="bone ", pch=1)
-abline(lm(bone~ID), col="red")
+plot(birth, bone, main="Number of bones after mutation", 
+     xlab="birth ", ylab="bone ", pch=1)
+abline(lm(bone~birth), col="green")
+abline(lm(bone_orig~birth), col="red")
 
-plot(ID, bone_orig, type="p", main="Number of bones before mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(bone_orig~ID), col="red")
+plot(birth, bone_orig, type="p", main="Number of bones before mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(bone_orig~birth), col="red")
 
-plot(ID,muscles, main="Number of fat to muscle voxels before mutation",
+plot(fat,muscles, main="Number of fat to muscle voxels before mutation",
      xlab = "muscle", ylab = "fat", pch=1)
-abline(lm(muscles~ID),col="red")
+abline(lm(muscles~fat),col="red")
 
 plot(fat_orig,muscles_orig, main="Number of fat to muscle voxels after mutation",
      xlab = "muscles", ylab = "fat", pch=1)
-abline(lm(muscles_orig~ID),col="red")
+abline(lm(muscles_orig~fat_orig),col="red")
 
-plot(ID,probability, main="Probability of mutation over time",
-     xlab = "probability", ylab = "ID", pch=1)
-abline(lm(probability~ID),col="red")
+plot(birth,probability, main="Probability of mutation over time",
+     xlab = "probability", ylab = "birth", pch=1)
+abline(lm(probability~birth),col="red")
 
 plot(probability, bone_diff, type="p", main="Difference in number of bones against probability of mutation", 
      xlab="probability", ylab="difference in number of bones ", pch=1)
@@ -115,25 +123,85 @@ exp_4 = ddata[ddata$Exp_Num == '4',]
 exp_5 = ddata[ddata$Exp_Num == '5',]
 exp_6 = ddata[ddata$Exp_Num == '6',]
 
+########################## LOWESS MODELS ############################
 
-diaEff = ddata[]
+
+# ################# Convert variables to factor ################
+# ddata <- within(ddata, {
+#   expNum <- factor(Exp_Num)
+#   prob <- factor(probability)
+#   step <- factor(euclideanStep)
+#   ID <- factor(Ind_ID)
+# })
+# 
+# ################# Interaction Plot #################
+# with(ddata, interaction.plot(birth, expNum, step,
+#                              ylim = c(0, 1), #lty= c(1, 12), lwd = 3,
+#                              ylab = "distance", xlab = "time", trace.label = "experiment"))
+# 
+# ddata.aov <- aov(step ~ expNum * prob + Error(ID), data = ddata)
+# summary(demo1.aov)
 
 
-################# Convert variables to factor ################
-ddata <- within(ddata, {
-  expNum <- factor(Exp_Num)
-  prob <- factor(probability)
-  step <- factor(euclideanStep)
-  ID <- factor(Ind_ID)
-})
+########################## QUANTILES ############################
 
-################# Interaction Plot #################
-with(ddata, interaction.plot(ID, expNum, step,
-                             ylim = c(0, 1), #lty= c(1, 12), lwd = 3,
-                             ylab = "distance", xlab = "time", trace.label = "experiment"))
 
-ddata.aov <- aov(step ~ expNum * prob + Error(ID), data = ddata)
-summary(demo1.aov)
+quantile(ES_distance)
+
+ES_low = ddata[ES_distance < 0.03208281,]
+ES_high = ddata[ES_distance > 0.09741675,]
+
+quantile(MS_distance)
+
+MS_low = ddata[MS_distance < 0.04106062,]
+MS_high = ddata[MS_distance > 0.12354272,]
+
+quantile(ET_distance)
+
+ET_low = ddata[ET_distance < 0.007052207,]
+ET_high = ddata[ET_distance > 0.040361796,]
+
+quantile(MT_distance)
+
+MT_low = ddata[MT_distance < 0.00884018,]
+MT_high = ddata[MT_distance > 0.05105609,]
+
+quantile(birth, na.rm = TRUE)
+
+first = ddata[birth < 4.188630,]
+last = ddata[birth > 4.188630,]
+
+mean(first$euclideanStep, na.rm = TRUE)
+mean(last$euclideanStep, na.rm = TRUE)
+
+mean(first$originalEuclideanStep, na.rm = TRUE)
+mean(last$originalEuclideanStep, na.rm = TRUE)
+
+mean(first$manhattanStep, na.rm = TRUE)
+mean(last$manhattanStep, na.rm = TRUE)
+
+mean(first$euclideanTotal, na.rm = TRUE)
+mean(last$euclideanTotal, na.rm = TRUE)
+
+mean(first$manhattanTotal, na.rm = TRUE)
+mean(last$manhattanTotal, na.rm = TRUE)
+
+plot(first$birthtime,first$euclideanStep)
+plot(last$birthtime,last$euclideanStep)
+
+mean(first$manhattanStep, na.rm = TRUE)
+mean(last$manhattanStep, na.rm = TRUE)
+
+mean(first$euclideanTotal, na.rm = TRUE)
+mean(last$euclideanTotal, na.rm = TRUE)
+
+mean(first$manhattanTotal, na.rm = TRUE)
+mean(last$manhattanTotal, na.rm = TRUE)
+
+
+
+
+
 
 
 
