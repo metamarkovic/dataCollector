@@ -10,6 +10,7 @@ raw_data <- read.csv("F:/corvax/masterProject/masterData/diseaseData.csv", sep="
 ddata = na.omit(raw_data)
 
 # Extract vectors
+birth = ddata$birthtime
 fat = ddata$totalFat
 fat_orig = ddata$originalFat
 muscles = ddata$totalMuscles
@@ -52,37 +53,37 @@ median(fat_orig, na.rm = TRUE)
 ########################## DESCRIPTIVE GRAPHS ##########################
 
 # Scatter plots
-plot(ID, fat, main="Number of fat voxels over time", 
-     xlab="ID ", ylab="fat ", pch=1)
-abline(lm(fat~ID), col="red")
+plot(birth, fat, main="Number of fat voxels over time", 
+     xlab="Birthtime", ylab="fat ", pch=1)
+abline(lm(fat~birth), col="red")
 
-plot(ID, muscles, type="p", main="Number of muscles after mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(muscles~ID), col="green")
+plot(birth, muscles, type="p", main="Number of muscles after mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(muscles~birth), col="green")
 
-plot(ID, muscles_orig, type="p", main="Number of muscles before mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(muscles_orig~ID), col="blue")
+plot(birth, muscles_orig, type="p", main="Number of muscles before mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(muscles_orig~birth), col="blue")
 
-plot(ID, bone, main="Number of bones after mutation", 
-     xlab="ID ", ylab="bone ", pch=1)
-abline(lm(bone~ID), col="red")
+plot(birth, bone, main="Number of bones after mutation", 
+     xlab="birth ", ylab="bone ", pch=1)
+abline(lm(bone~birth), col="red")
 
-plot(ID, bone_orig, type="p", main="Number of bones before mutation", 
-     xlab="ID ", ylab="muscles ", pch=1)
-abline(lm(bone_orig~ID), col="red")
+plot(birth, bone_orig, type="p", main="Number of bones before mutation", 
+     xlab="birth ", ylab="muscles ", pch=1)
+abline(lm(bone_orig~birth), col="red")
 
-plot(ID,muscles, main="Number of fat to muscle voxels before mutation",
+plot(birth,muscles, main="Number of fat to muscle voxels before mutation",
      xlab = "muscle", ylab = "fat", pch=1)
-abline(lm(muscles~ID),col="red")
+abline(lm(muscles~birth),col="red")
 
 plot(fat_orig,muscles_orig, main="Number of fat to muscle voxels after mutation",
      xlab = "muscles", ylab = "fat", pch=1)
-abline(lm(muscles_orig~ID),col="red")
+abline(lm(muscles_orig~birth),col="red")
 
-plot(ID,probability, main="Probability of mutation over time",
-     xlab = "probability", ylab = "ID", pch=1)
-abline(lm(probability~ID),col="red")
+plot(birth,probability, main="Probability of mutation over time",
+     xlab = "probability", ylab = "birth", pch=1)
+abline(lm(probability~birth),col="red")
 
 plot(probability, bone_diff, type="p", main="Difference in number of bones against probability of mutation", 
      xlab="probability", ylab="difference in number of bones ", pch=1)
@@ -118,6 +119,36 @@ exp_6 = ddata[ddata$Exp_Num == '6',]
 
 diaEff = ddata[]
 
+# exp_3[exp_3$Ind_ID == '1984',]#
+# exp_3[exp_3$Ind_ID == '1904',]# and 1919 as the second parent
+# exp_3[exp_3$Ind_ID == '1713',] #
+# exp_3[exp_3$Ind_ID == '1518',]
+# exp_3[exp_3$Ind_ID == '1423',]#
+# exp_3[exp_3$Ind_ID == '1354',]
+# exp_3[exp_3$Ind_ID == '1284',]#
+# exp_3[exp_3$Ind_ID == '1152',]
+# exp_3[exp_3$Ind_ID == '1081',] #
+# exp_3[exp_3$Ind_ID == '985',]
+# exp_3[exp_3$Ind_ID == '705',]#
+# exp_3[exp_3$Ind_ID == '591',]
+# exp_3[exp_3$Ind_ID == '175',] #
+# exp_3[exp_3$Ind_ID == '75',] #
+#        
+# # max: 1984
+# # parents: [1919, 1904]   picked: 1904
+# # parents: [1837, 1713]   picked: 1713
+# # parents: [1645, 1518]   picked: 1518
+# # parents: [1448, 1423]   picked: 1423
+# # parents: [1354, 1243]   picked: 1354
+# # parents: [1285, 1284]   picked: 1284
+# # parents: [1215, 1152]   picked: 1152
+# # parents: [1081, 1069]   picked: 1081
+# # parents: [995, 985]   picked: 985
+# # parents: [884, 705]   picked: 705
+# # parents: [607, 591]   picked: 591
+# # parents: [493, 274]   picked: 274
+# # parents: [175, 103]   picked: 175
+# # parents: [75, 65]   picked: 75
 
 ################# Convert variables to factor ################
 ddata <- within(ddata, {
