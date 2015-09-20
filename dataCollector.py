@@ -7,6 +7,13 @@ import xml.etree.cElementTree as ET
 
 __author__ = 'meta'
 
+""" DataCollector main script
+
+This script can be run standalone with 2 optional command line parameters:
+[search pattern] - (default: '../EC14-Exp-1*'), this defines what folders are searched. Can also be set to "null" to use the default
+[output file name] - (default: 'data.csv'), this defines the filename of the CSV output that this script generates
+"""
+
 
 class DataCollector:
     fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep', 'euclideanTotal',
@@ -20,7 +27,7 @@ class DataCollector:
         else:
             self.pattern = pattern
         if not outputFile:
-            self.outputFile = 'diseaseData.csv'
+            self.outputFile = 'data.csv'
         else:
             self.outputFile = outputFile
 
