@@ -59,10 +59,12 @@ class DataCollector:
                     try:
                         distances = td.calcDistance(traceFilename)
                         birthtime = dc.getBirthTime(traceFilename)
+                        if not birthtime:
+                            birthtime = 'NA'
                         print distances  # Testing
                         print 'Born at: ' + str(birthtime)
                     except IOError:
-                        distances = ['NA', 'NA', 'NA', 'NA', 'NA']
+                        distances = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         birthtime = ['NA']
                         print indNumber + " trace file missing in /traces_afterPP/ of experiment " + experimentNumber
 
@@ -70,7 +72,7 @@ class DataCollector:
                         NOMUT_distacnes = td.calcDistance(NOMUT_traceFilename)
                         print NOMUT_distacnes
                     except IOError:
-                        NOMUT_distacnes = ['NA', 'NA', 'NA', 'NA', 'NA']
+                        NOMUT_distacnes = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         print indNumber + " trace file missing in /traces_NOMUT/ of experiment " + experimentNumber
 
                     writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
@@ -104,10 +106,10 @@ class DataCollector:
             probability = (count[1] / 1000.0) * 0.5
             print "Probability: " + str(probability)  # Testing
             if dna_length != (sum(count) - count[4]):
-                count = ["NA", "NA", "NA", "NA", "NA"]
+                count = ["NA", "NA", "NA", "NA", "NA"]  # Batman
                 print "DNA length count error for " + ID + " in /population/ of experiment " + expNum
         except ET.ParseError:
-            count = ["NA", "NA", "NA", "NA", "NA"]
+            count = ["NA", "NA", "NA", "NA", "NA"]  # Batman
             probability = "NA"
             lifetime = "NA"
             print ID + "_vox.vxa file missing in " + filepath + " of experiment " + expNum
