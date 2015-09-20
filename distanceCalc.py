@@ -54,3 +54,12 @@ class DistanceCalc:
                 return  math.sqrt((x_diff**2) + (y_diff**2))
             if type == "manhattan":
                 return math.fabs(x_diff) + math.fabs(y_diff)
+
+    def getBirthTime(self, filename):
+        with open(filename, 'r') as inputFile:
+            for line in inputFile:
+                lineSplit = line.split("\t")
+                if len(lineSplit) != 5:
+                    return False
+                else:
+                    return float(lineSplit[1])
