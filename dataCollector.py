@@ -14,17 +14,21 @@ class DataCollector:
                   'originalFat', 'originalBone', 'originalEuclideanStep', 'originalManhattanStep',
                   'originalEuclideanTotal', 'originalManhattanTotal']
 
-    def __init__(self, pattern):
+    def __init__(self, pattern, outputFile):
         if not pattern:
             self.pattern = '../EC14-Exp-1*'
         else:
             self.pattern = pattern
+        if not outputFile:
+            self.outputFile = 'diseaseData.csv'
+        else:
+            self.outputFile = outputFile
 
     def dataCollector(self):
-        listing = glob.glob('../EC14-Exp-1*')
+        listing = glob.glob(self.pattern)
         td = TraceDistance()
         dc = DistanceCalc()
-        with open('diseaseData.csv', 'w') as csvfile:
+        with open(self.outputFile, 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
             writer.writeheader()
             print  listing  # Testing
@@ -75,7 +79,8 @@ class DataCollector:
                     # except KeyboardInterrupt:
                     #     quit()
 
-    def voxCounter(self, expNum, filepath, ID):
+    @staticmethod
+    def voxCounter(expNum, filepath, ID):
         try:
             tree = ET.ElementTree(file=filepath)
             root = tree.getroot()
@@ -99,15 +104,21 @@ class DataCollector:
             probability = "NA"
             lifetime = "NA"
             print ID + "_vox.vxa file missing in " + filepath + " of experiment " + expNum
-        return (probability, lifetime, count)
+        return probability, lifetime, count
 
 
 if __name__ == "__main__":
     import sys
 
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         pattern = sys.argv[1]
+        if pattern == "null" or pattern == "False":
+            pattern = False
     else:
         pattern = False
-    dataCol = DataCollector(pattern)
+    if len(sys.argv) == 3:
+        outputFile = sys.argv[2]
+    else:
+        outputFile = False
+    dataCol = DataCollector(pattern, outputFile)
     dataCol.dataCollector()
