@@ -16,14 +16,19 @@ This script can be run standalone with 2 optional command line parameters:
 
 
 class DataCollector:
+    # fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep', 'euclideanTotal',
+    #               'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat', 'totalBone', 'originalMuscle',
+    #               'originalFat', 'originalBone', 'originalEuclideanStep', 'originalManhattanStep',
+    #               'originalEuclideanTotal', 'originalManhattanTotal']
     fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep', 'euclideanTotal',
-                  'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat', 'totalBone', 'originalMuscle',
-                  'originalFat', 'originalBone', 'originalEuclideanStep', 'originalManhattanStep',
-                  'originalEuclideanTotal', 'originalManhattanTotal']
+                  'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat', 'totalBone', 'diseasedMuscle',
+                  'diseasedFat', 'diseasedBone', 'diseasedEuclideanStep', 'diseasedManhattanStep',
+                  'diseasedEuclideanTotal', 'diseasedManhattanTotal']
 
     def __init__(self, pattern, outputFile):
         if not pattern:
-            self.pattern = '../EC14-Exp-1*'
+            # self.pattern = '../EC14-Exp-1*'
+            self.pattern = '../EC14-Exp-2*'
         else:
             self.pattern = pattern
         if not outputFile:
@@ -55,7 +60,7 @@ class DataCollector:
                                                                                      indNumber)
 
                     traceFilename = os.path.abspath(nestFile + "/traces_afterPP/" + indNumber + ".trace")
-                    NOMUT_traceFilename = os.path.abspath(nestFile + "/traces_NOVIRUS/" + indNumber + ".trace")
+                    NOMUT_traceFilename = os.path.abspath(nestFile + "/traces_NOMUT/" + indNumber + ".trace")
                     try:
                         distances = td.calcDistance(traceFilename)
                         birthtime = dc.getBirthTime(traceFilename)
@@ -69,22 +74,32 @@ class DataCollector:
                         print indNumber + " trace file missing in /traces_afterPP/ of experiment " + experimentNumber
 
                     try:
-                        NOMUT_distacnes = td.calcDistance(NOMUT_traceFilename)
-                        print NOMUT_distacnes
+                        NOMUT_distances = td.calcDistance(NOMUT_traceFilename)
+                        print NOMUT_distances
                     except IOError:
-                        NOMUT_distacnes = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
+                        NOMUT_distances = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         print indNumber + " trace file missing in /traces_NOMUT/ of experiment " + experimentNumber
 
+                    # writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
+                    #                  'probability': voxProbability, 'euclideanStep': distances[0],
+                    #                  'manhattanStep': distances[1], 'euclideanTotal': distances[2],
+                    #                  'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
+                    #                  'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1], 'totalBone': voxCounts[2],
+                    #                  'originalMuscle': voxCounts_orig[3], 'originalFat': voxCounts_orig[1],
+                    #                  'originalBone': voxCounts_orig[2], 'originalEuclideanStep': NOMUT_distances[0],
+                    #                  'originalManhattanStep': NOMUT_distances[1],
+                    #                  'originalEuclideanTotal': NOMUT_distances[2],
+                    #                  'originalManhattanTotal': NOMUT_distances[3]})
                     writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
                                      'probability': voxProbability, 'euclideanStep': distances[0],
                                      'manhattanStep': distances[1], 'euclideanTotal': distances[2],
                                      'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
                                      'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1], 'totalBone': voxCounts[2],
-                                     'originalMuscle': voxCounts_orig[3], 'originalFat': voxCounts_orig[1],
-                                     'originalBone': voxCounts_orig[2], 'originalEuclideanStep': NOMUT_distacnes[0],
-                                     'originalManhattanStep': NOMUT_distacnes[1],
-                                     'originalEuclideanTotal': NOMUT_distacnes[2],
-                                     'originalManhattanTotal': NOMUT_distacnes[3]})
+                                     'diseasedMuscle': voxCounts_orig[3], 'diseasedFat': voxCounts_orig[1],
+                                     'diseasedBone': voxCounts_orig[2], 'diseasedEuclideanStep': NOMUT_distances[0],
+                                     'diseasedManhattanStep': NOMUT_distances[1],
+                                     'diseasedEuclideanTotal': NOMUT_distances[2],
+                                     'diseasedManhattanTotal': NOMUT_distances[3]})
                     # except KeyboardInterrupt:
                     #     quit()
 
