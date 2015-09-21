@@ -8,9 +8,9 @@ class DistanceCalc:
             dist = 0
             for line in inputFile:
                 lineSplit = line.split("\t")
-                if len(lineSplit) != 5 or str(float(lineSplit[2])) != str(lineSplit[2]):
+                if len(lineSplit) != 5 or not self.sameAsFloat(lineSplit[2]):
                     lineSplit = line.split(" ")
-                    if len(lineSplit) != 5 or str(float(lineSplit[2])) != str(lineSplit[2]):
+                    if len(lineSplit) != 5 or not self.sameAsFloat(lineSplit[2]):
                         continue
                 if not firstRun:
                     x_diff = x - float(lineSplit[2])
@@ -34,9 +34,9 @@ class DistanceCalc:
             goodline = None
             for line in inputFile:
                 lineSplit = line.split("\t")
-                if len(lineSplit) != 5 or str(float(lineSplit[2])) != str(lineSplit[2]):
+                if len(lineSplit) != 5 or not self.sameAsFloat(lineSplit[2]):
                     lineSplit = line.split(" ")
-                    if len(lineSplit) != 5 or str(float(lineSplit[2])) != str(lineSplit[2]):
+                    if len(lineSplit) != 5 or not self.sameAsFloat(lineSplit[2]):
                         continue
                 goodline = lineSplit
                 if firstRun:
@@ -55,7 +55,8 @@ class DistanceCalc:
             if type == "manhattan":
                 return math.fabs(x_diff) + math.fabs(y_diff)
 
-    def getBirthTime(self, filename):
+    @staticmethod
+    def getBirthTime(filename):
         with open(filename, 'r') as inputFile:
             for line in inputFile:
                 lineSplit = line.split("\t")
@@ -63,3 +64,11 @@ class DistanceCalc:
                     return False
                 else:
                     return float(lineSplit[1])
+
+    @staticmethod
+    def sameAsFloat(input):
+        try:
+            floatInput = float(input)
+            return str(floatInput) == str(input)
+        except ValueError:
+            return False
