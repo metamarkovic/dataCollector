@@ -9,6 +9,9 @@ raw_data <- read.csv("F:/corvax/masterProject/masterData/diseaseData.csv", sep="
 ddata = raw_data[complete.cases(raw_data),]
 ddata = na.omit(ddata)
 
+ddata2 = raw_data2[complete.cases(raw_data2),]
+ddata2 = na.omit(ddata2)
+
 
 mutatedNormalsData <- read.csv("F:/corvax/masterProject/masterData/masterData/dataCollector/mutatedNormalsData.csv")
 mndata = mutatedNormalsData[,-13]
