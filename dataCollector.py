@@ -16,19 +16,9 @@ This script can be run standalone with 2 optional command line parameters:
 
 
 class DataCollector:
-    # fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep', 'euclideanTotal',
-    #               'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat', 'totalBone', 'originalMuscle',
-    #               'originalFat', 'originalBone', 'originalEuclideanStep', 'originalManhattanStep',
-    #               'originalEuclideanTotal', 'originalManhattanTotal']
-    fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep', 'euclideanTotal',
-                  'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat', 'totalBone', 'diseasedMuscle',
-                  'diseasedFat', 'diseasedBone', 'diseasedEuclideanStep', 'diseasedManhattanStep',
-                  'diseasedEuclideanTotal', 'diseasedManhattanTotal']
-
     def __init__(self, pattern, outputFile):
         if not pattern:
-            # self.pattern = '../EC14-Exp-1*'
-            self.pattern = '../EC14-Exp-2*'
+            self.pattern = '../EC14-Exp-1*'
         else:
             self.pattern = pattern
         if not outputFile:
@@ -41,8 +31,7 @@ class DataCollector:
         td = TraceDistance()
         dc = DistanceCalc()
         with open(self.outputFile, 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
-            writer.writeheader()
+            headersWritten = False
             print  listing  # Testing
             for nestFile in listing:
                 print "Experiment folder: " + nestFile  # Testing
@@ -66,11 +55,32 @@ class DataCollector:
 
                     traceFilename = os.path.abspath(nestFile + "/traces_afterPP/" + indNumber + ".trace")
                     mutatedBasePath = nestFile + "/traces_{condition}/" + indNumber + ".trace"
-                    NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="NOMUT"))
+                    NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="MUT"))
+                    variant = "mut"
+
                     if not os.path.isfile(NOMUT_traceFilename):
-                        NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="MUT"))
+                        NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="NOMUT"))
+                        variant = "nomut"
                         if not os.path.isfile(NOMUT_traceFilename):
                             NOMUT_traceFilename = False
+
+                    if variant == "nomut":
+                        fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep',
+                                      'euclideanTotal', 'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat',
+                                      'totalBone', 'diseasedMuscle', 'diseasedFat', 'diseasedBone',
+                                      'diseasedEuclideanStep', 'diseasedManhattanStep',
+                                      'diseasedEuclideanTotal', 'diseasedManhattanTotal']
+                    else:
+                        fieldnames = ['Ind_ID', 'birthtime', 'Exp_Num', 'probability', 'euclideanStep', 'manhattanStep',
+                                      'euclideanTotal', 'manhattanTotal', 'lifetime', 'size', 'totalMuscles', 'totalFat',
+                                      'totalBone', 'originalMuscle', 'originalFat', 'originalBone',
+                                      'originalEuclideanStep', 'originalManhattanStep', 'originalEuclideanTotal',
+                                      'originalManhattanTotal']
+
+                    if not headersWritten:
+                        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                        writer.writeheader()
+                        headersWritten = True
 
                     if os.path.isfile(traceFilename):
                         distances = td.calcDistance(traceFilename)
@@ -91,27 +101,36 @@ class DataCollector:
                         NOMUT_distances = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         print indNumber + " trace file missing in /traces_NOMUT/ of experiment " + experimentNumber
 
+                    if variant == "mut":
+                        columnNames = {'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
+                                       'probability': voxProbability, 'euclideanStep': distances[0],
+                                       'manhattanStep': distances[1], 'euclideanTotal': distances[2],
+                                       'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
+                                       'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1],
+                                       'totalBone': voxCounts[2],
+                                       'originalMuscle': voxCounts_orig[3], 'originalFat': voxCounts_orig[1],
+                                       'originalBone': voxCounts_orig[2], 'originalEuclideanStep': NOMUT_distances[0],
+                                       'originalManhattanStep': NOMUT_distances[1],
+                                       'originalEuclideanTotal': NOMUT_distances[2],
+                                       'originalManhattanTotal': NOMUT_distances[3]}
+                    elif variant == "nomut":
+                        columnNames = {'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
+                                       'probability': voxProbability, 'euclideanStep': distances[0],
+                                       'manhattanStep': distances[1], 'euclideanTotal': distances[2],
+                                       'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
+                                       'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1],
+                                       'totalBone': voxCounts[2],
+                                       'diseasedMuscle': voxCounts_orig[3], 'diseasedFat': voxCounts_orig[1],
+                                       'diseasedBone': voxCounts_orig[2], 'diseasedEuclideanStep': NOMUT_distances[0],
+                                       'diseasedManhattanStep': NOMUT_distances[1],
+                                       'diseasedEuclideanTotal': NOMUT_distances[2],
+                                       'diseasedManhattanTotal': NOMUT_distances[3]}
+                    else:
+                        print "File reading (mut/nomut) error!"
+                        break
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    writer.writerow(columnNames)
 
-                    # writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
-                    #                  'probability': voxProbability, 'euclideanStep': distances[0],
-                    #                  'manhattanStep': distances[1], 'euclideanTotal': distances[2],
-                    #                  'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
-                    #                  'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1], 'totalBone': voxCounts[2],
-                    #                  'originalMuscle': voxCounts_orig[3], 'originalFat': voxCounts_orig[1],
-                    #                  'originalBone': voxCounts_orig[2], 'originalEuclideanStep': NOMUT_distances[0],
-                    #                  'originalManhattanStep': NOMUT_distances[1],
-                    #                  'originalEuclideanTotal': NOMUT_distances[2],
-                    #                  'originalManhattanTotal': NOMUT_distances[3]})
-                    writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
-                                     'probability': voxProbability, 'euclideanStep': distances[0],
-                                     'manhattanStep': distances[1], 'euclideanTotal': distances[2],
-                                     'manhattanTotal': distances[3], 'lifetime': voxLifetime, 'size': voxCounts[4],
-                                     'totalMuscles': voxCounts[3], 'totalFat': voxCounts[1], 'totalBone': voxCounts[2],
-                                     'diseasedMuscle': voxCounts_orig[3], 'diseasedFat': voxCounts_orig[1],
-                                     'diseasedBone': voxCounts_orig[2], 'diseasedEuclideanStep': NOMUT_distances[0],
-                                     'diseasedManhattanStep': NOMUT_distances[1],
-                                     'diseasedEuclideanTotal': NOMUT_distances[2],
-                                     'diseasedManhattanTotal': NOMUT_distances[3]})
                     # except KeyboardInterrupt:
                     #     quit()
 
