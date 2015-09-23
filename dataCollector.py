@@ -53,32 +53,44 @@ class DataCollector:
                     indNumber = path[27:-8]
                     print "Population path: " + path  # Testing
                     print "Ind. ID: " + indNumber  # Testing
-                    backup_path = os.path.abspath(nestFile + "/population_beforePL/" + indNumber + "_vox.vxa")
+                    backupBasePath = nestFile + "/population_{condition}/" + indNumber + "_vox.vxa"
+                    backup_path = os.path.abspath(backupBasePath.format(condition="beforePL"))
+                    if not os.path.isfile(backup_path):
+                        backup_path = os.path.abspath(backupBasePath.format(condition="MUT"))
+                        if not os.path.isfile(backup_path):
+                            backup_path = False
                     print "Backups path: " + backup_path  # Testing
                     voxProbability, voxLifetime, voxCounts = self.voxCounter(experimentNumber, path, indNumber)
                     voxProb_orig, voxProbLife_orig, voxCounts_orig = self.voxCounter(experimentNumber, backup_path,
                                                                                      indNumber)
 
                     traceFilename = os.path.abspath(nestFile + "/traces_afterPP/" + indNumber + ".trace")
-                    NOMUT_traceFilename = os.path.abspath(nestFile + "/traces_NOMUT/" + indNumber + ".trace")
-                    try:
+                    mutatedBasePath = nestFile + "/traces_{condition}/" + indNumber + ".trace"
+                    NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="NOMUT"))
+                    if not os.path.isfile(NOMUT_traceFilename):
+                        NOMUT_traceFilename = os.path.abspath(mutatedBasePath.format(condition="MUT"))
+                        if not os.path.isfile(NOMUT_traceFilename):
+                            NOMUT_traceFilename = False
+
+                    if os.path.isfile(traceFilename):
                         distances = td.calcDistance(traceFilename)
                         birthtime = dc.getBirthTime(traceFilename)
                         if not birthtime:
                             birthtime = 'NA'
                         print distances  # Testing
                         print 'Born at: ' + str(birthtime)
-                    except IOError:
+                    else:
                         distances = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         birthtime = ['NA']
                         print indNumber + " trace file missing in /traces_afterPP/ of experiment " + experimentNumber
 
-                    try:
+                    if NOMUT_traceFilename:
                         NOMUT_distances = td.calcDistance(NOMUT_traceFilename)
                         print NOMUT_distances
-                    except IOError:
+                    else:
                         NOMUT_distances = ['NA', 'NA', 'NA', 'NA', 'NA']  # Batman
                         print indNumber + " trace file missing in /traces_NOMUT/ of experiment " + experimentNumber
+
 
                     # writer.writerow({'Ind_ID': indNumber, 'birthtime': birthtime, 'Exp_Num': experimentNumber,
                     #                  'probability': voxProbability, 'euclideanStep': distances[0],
@@ -103,8 +115,9 @@ class DataCollector:
                     # except KeyboardInterrupt:
                     #     quit()
 
-    @staticmethod
-    def voxCounter(expNum, filepath, ID):
+    def voxCounter(self, expNum, filepath, ID):
+        if not os.path.isfile(filepath):
+            return self.voxCounterError(expNum, filepath, ID)
         try:
             tree = ET.ElementTree(file=filepath)
             root = tree.getroot()
@@ -123,11 +136,15 @@ class DataCollector:
             if dna_length != (sum(count) - count[4]):
                 count = ["NA", "NA", "NA", "NA", "NA"]  # Batman
                 print "DNA length count error for " + ID + " in /population/ of experiment " + expNum
+            return probability, lifetime, count
         except ET.ParseError:
-            count = ["NA", "NA", "NA", "NA", "NA"]  # Batman
-            probability = "NA"
-            lifetime = "NA"
-            print ID + "_vox.vxa file missing in " + filepath + " of experiment " + expNum
+            return self.voxCounterError(expNum, filepath, ID)
+
+    def voxCounterError(self, expNum, filepath, ID):
+        count = ["NA", "NA", "NA", "NA", "NA"]  # Batman
+        probability = "NA"
+        lifetime = "NA"
+        print ID + "_vox.vxa file missing in " + filepath + " of experiment " + expNum
         return probability, lifetime, count
 
 
