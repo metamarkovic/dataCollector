@@ -53,11 +53,11 @@ L_prob = Ldata$probability
 L_birth = as.numeric(Ldata$birthtime)
 
 L_fat = Ldata$totalFat
-L_fat_orig = Ldata$originalFat
+L_fat_orig = Ldata$diseasedFat
 L_muscles = Ldata$totalMuscles
-L_muscles_orig = Ldata$originalMuscle
+L_muscles_orig = Ldata$diseasedMuscle
 L_bone = Ldata$totalBone
-L_bone_orig = Ldata$originalBone
+L_bone_orig = Ldata$diseasedBone
 L_size = Ldata$size
 
 L_ES = Ldata$euclideanStep
