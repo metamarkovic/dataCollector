@@ -30,6 +30,7 @@ class DataCollector2:
         self.headersWritten = False
         self.writer = False
         self.outputFileHandle = False
+        self.previousPercentDone = 0
         self.expNumberRegex = re.compile('([0-9]+)$')
         self.traceFolderNormal = "traces_afterPP"
         self.traceFoldersAlt = {
@@ -65,9 +66,18 @@ class DataCollector2:
             type = self.getType(exp)
             # print exp[0],type
             individuals = self.getIndividuals(exp)
-            for indiv in individuals[:10]:
+            print "parsing experiment {exp} (type: {type}) with {indivs} individuals".format(
+                exp=exp[0],
+                type=type,
+                indivs=len(individuals)
+            )
+            count = 0
+            for indiv in individuals:
                 features = self.getFeatures(exp, type, indiv)
                 self.writeFeatures(exp, type, indiv, features)
+                count += 1
+                self.printExperimentProgress(len(individuals), count)
+
         self.closeFile()
         print "wrote {} lines to {}".format(self.rowCount, self.outputFile)
 
@@ -109,11 +119,18 @@ class DataCollector2:
             output += feature.extract(experiment, type, indiv)
         return output
 
+    def printExperimentProgress(self, total, current):
+        percentDone = round(100 * current * 1.0 / total)
+        if percentDone != self.previousPercentDone:
+            sys.stdout.write('{}% done\r'.format(percentDone))
+            sys.stdout.flush()
+            self.previousPercentDone = percentDone
+
     def writeFeatures(self, experiment, type, indiv, features):
         if not self.headersWritten:
             self.headers = self.getFeatureHeader()
-            self.outputFileHandle = open(self.outputFile, "w")
-            self.writer = csv.DictWriter(self.outputFileHandle, fieldnames=self.headers, lineterminator='\n')
+            self.outputFileHandle = open(self.outputFile, "wb")
+            self.writer = csv.DictWriter(self.outputFileHandle, fieldnames=self.headers)
             self.writer.writeheader()
             self.headersWritten = True
         self.rowCount += 1
@@ -132,7 +149,7 @@ class DataCollector2:
     @staticmethod
     def errorHasBothPopFiles(experiment):
         print "ERROR: this shouldn't happen - an experiment has alternative population files " \
-                      "both WITH and WITHOUT disease in addition to the normal experiment traces:"
+              "both WITH and WITHOUT disease in addition to the normal experiment traces:"
         print experiment
         print "...Please fix this before continuing. Exiting."
         quit()
@@ -143,6 +160,7 @@ class DataCollector2:
         print experiment
         print "...Please fix this before continuing. Exiting."
         quit()
+
 
 if __name__ == "__main__":
     import sys
