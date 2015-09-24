@@ -1,6 +1,8 @@
+import csv
 import glob
 import re
 import os
+from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
 
 __author__ = 'meta'
 
@@ -23,6 +25,11 @@ class DataCollector2:
         else:
             self.outputFile = outputFile
 
+        self.rowCount = 0
+        self.headers = []
+        self.headersWritten = False
+        self.writer = False
+        self.outputFileHandle = False
         self.expNumberRegex = re.compile('([0-9]+)$')
         self.traceFolderNormal = "traces_afterPP"
         self.traceFoldersAlt = {
@@ -34,6 +41,9 @@ class DataCollector2:
             "with disease": "population_beforePL",
             "no disease": "population_MUT"
         }
+        self.featureExtractors = [
+            AbsoluteCellCount()
+        ]
 
     def getExperiments(self):
         expFolders = glob.glob(self.pattern)
@@ -43,9 +53,7 @@ class DataCollector2:
         return output
 
     def getExpNumber(self, haystack):
-        print haystack
         m = self.expNumberRegex.search(haystack)
-        print m
         if m is not None:
             return m.group(1)
         else:
@@ -57,9 +65,11 @@ class DataCollector2:
             type = self.getType(exp)
             # print exp[0],type
             individuals = self.getIndividuals(exp)
-            for indiv in individuals:
+            for indiv in individuals[:10]:
                 features = self.getFeatures(exp, type, indiv)
                 self.writeFeatures(exp, type, indiv, features)
+        self.closeFile()
+        print "wrote {} lines to {}".format(self.rowCount, self.outputFile)
 
     def getIndividuals(self, experiment):
         indivs = glob.glob(experiment[2] + os.path.sep + self.populationFolderNormal + os.path.sep + "*.vxa")
@@ -67,16 +77,16 @@ class DataCollector2:
         return output
 
     def getType(self, experiment):
-        # if the alternative traces DON'T a disease then the main experiment DID have a disease
+        # if the alternative population DOESN'T have a disease then the main experiment DID have a disease
         if self.hasAltPopWithoutDisease(experiment):
             return "with disease"
-        # if the alternative traces DO have a disease then the main experiment DIDN'T have a disease
+        # if the alternative population DOES have a disease then the main experiment DIDN'T have a disease
         if self.hasAltPopWithDisease(experiment):
             if not self.hasAltPopWithoutDisease(experiment):
                 return "no disease"
             else:
                 self.errorHasBothPopFiles(experiment)
-        # if neither is the case, then there are no trace files for this experiment... abort
+        # if neither is the case, then there are no population files for this experiment... abort
         self.errorHasNoPop()
 
     def hasAltPopWithoutDisease(self, experiment):
@@ -94,12 +104,30 @@ class DataCollector2:
         return False
 
     def getFeatures(self, experiment, type, indiv):
-        #TODO: implement different feature extractors
-        pass
+        output = []
+        for feature in self.featureExtractors:
+            output += feature.extract(experiment, type, indiv)
+        return output
 
     def writeFeatures(self, experiment, type, indiv, features):
-        #TODO: implement CSV writer
-        pass
+        if not self.headersWritten:
+            self.headers = self.getFeatureHeader()
+            self.outputFileHandle = open(self.outputFile, "w")
+            self.writer = csv.DictWriter(self.outputFileHandle, fieldnames=self.headers, lineterminator='\n')
+            self.writer.writeheader()
+            self.headersWritten = True
+        self.rowCount += 1
+        rowDict = dict(zip(self.headers, features))
+        self.writer.writerow(rowDict)
+
+    def closeFile(self):
+        self.outputFileHandle.close()
+
+    def getFeatureHeader(self):
+        output = []
+        for feature in self.featureExtractors:
+            output += feature.getCSVheader()
+        return output
 
     @staticmethod
     def errorHasBothPopFiles(experiment):
