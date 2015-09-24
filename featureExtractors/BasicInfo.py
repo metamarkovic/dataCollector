@@ -7,8 +7,8 @@ class BasicInfo(FeatureExtractorAbstract):
 
     def extract(self, experiment, type, indiv):
         if type == "no disease":
-            t = "wd"
-        else:
             t = "nd"
+        else:
+            t = "wd"
 
         return [indiv[0], experiment[0], t]

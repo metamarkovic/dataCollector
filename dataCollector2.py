@@ -4,7 +4,9 @@ import re
 import os
 from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
 from featureExtractors.BasicInfo import BasicInfo
+from featureExtractors.DistanceAlt import DistanceAlt
 from featureExtractors.DistanceOriginal import DistanceOriginal
+from helpers.config import PathConfig
 
 __author__ = 'meta'
 
@@ -39,19 +41,11 @@ class DataCollector2:
         self.outputFileHandle = False
         self.previousPercentDone = 0
         self.expNumberRegex = re.compile('([0-9]+)$')
-        self.traceFolderNormal = "traces_afterPP"
-        self.traceFoldersAlt = {
-            "with disease": "traces_NOMUT",
-            "no disease": "traces_MUT"
-        }
-        self.populationFolderNormal = "population"
-        self.populationFoldersAlt = {
-            "with disease": "population_beforePL",
-            "no disease": "population_MUT"
-        }
+
         self.featureExtractors = [
             BasicInfo(),
             DistanceOriginal(),
+            DistanceAlt(),
             AbsoluteCellCount()
         ]
 
@@ -83,7 +77,7 @@ class DataCollector2:
             count = 0
             for indiv in individuals[:self.limit]:
                 features = self.getFeatures(exp, type, indiv)
-                self.writeFeatures(exp, type, indiv, features)
+                self.writeFeatures(features)
                 count += 1
                 self.printExperimentProgress(len(individuals), count)
 
@@ -91,17 +85,17 @@ class DataCollector2:
         print "wrote {} lines to {}".format(self.rowCount, self.outputFile)
 
     def getIndividuals(self, experiment):
-        indivs = glob.glob(experiment[2] + os.path.sep + self.populationFolderNormal + os.path.sep + "*.vxa")
+        indivs = glob.glob(experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + "*.vxa")
         output = [(os.path.basename(indiv).split("_")[0], indiv) for indiv in indivs]
         return output
 
     def getType(self, experiment):
-        # if the alternative population DOESN'T have a disease then the main experiment DID have a disease
-        if self.hasAltPopWithoutDisease(experiment):
-            return "with disease"
         # if the alternative population DOES have a disease then the main experiment DIDN'T have a disease
         if self.hasAltPopWithDisease(experiment):
-            if not self.hasAltPopWithoutDisease(experiment):
+            return "with disease"
+        # if the alternative population DOESN'T have a disease then the main experiment DID have a disease
+        if self.hasAltPopWithoutDisease(experiment):
+            if not self.hasAltPopWithDisease(experiment):
                 return "no disease"
             else:
                 self.errorHasBothPopFiles(experiment)
@@ -115,7 +109,7 @@ class DataCollector2:
         return self.hasAltPop(experiment, "with disease")
 
     def hasAltPop(self, experiment, condition):
-        altPopPath = experiment[2] + os.path.sep + self.populationFoldersAlt[condition]
+        altPopPath = experiment[2] + os.path.sep + PathConfig.populationFoldersAlt[condition]
         if not os.path.isdir(altPopPath):
             return False
         if len(os.listdir(altPopPath)) > 0:
@@ -135,7 +129,7 @@ class DataCollector2:
             sys.stdout.flush()
             self.previousPercentDone = percentDone
 
-    def writeFeatures(self, experiment, type, indiv, features):
+    def writeFeatures(self, features):
         if not self.headersWritten:
             self.headers = self.getFeatureHeader()
             self.outputFileHandle = open(self.outputFile, "wb")
