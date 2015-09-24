@@ -3,6 +3,8 @@ import glob
 import re
 import os
 from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
+from featureExtractors.BasicInfo import BasicInfo
+from featureExtractors.DistanceOriginal import DistanceOriginal
 
 __author__ = 'meta'
 
@@ -15,7 +17,7 @@ This script can be run standalone with 2 optional command line parameters:
 
 
 class DataCollector2:
-    def __init__(self, pattern, outputFile):
+    def __init__(self, pattern, outputFile, limit):
         if not pattern:
             self.pattern = '../EC14-Exp-*'
         else:
@@ -24,6 +26,11 @@ class DataCollector2:
             self.outputFile = 'data.csv'
         else:
             self.outputFile = outputFile
+        if not limit:
+            self.limit = 10
+        else:
+            self.limit = limit
+
 
         self.rowCount = 0
         self.headers = []
@@ -43,6 +50,8 @@ class DataCollector2:
             "no disease": "population_MUT"
         }
         self.featureExtractors = [
+            BasicInfo(),
+            DistanceOriginal(),
             AbsoluteCellCount()
         ]
 
@@ -72,7 +81,7 @@ class DataCollector2:
                 indivs=len(individuals)
             )
             count = 0
-            for indiv in individuals:
+            for indiv in individuals[:self.limit]:
                 features = self.getFeatures(exp, type, indiv)
                 self.writeFeatures(exp, type, indiv, features)
                 count += 1
@@ -122,7 +131,7 @@ class DataCollector2:
     def printExperimentProgress(self, total, current):
         percentDone = round(100 * current * 1.0 / total)
         if percentDone != self.previousPercentDone:
-            sys.stdout.write('{}% done\r'.format(percentDone))
+            sys.stdout.write('{}% done\r'.format(int(percentDone)))
             sys.stdout.flush()
             self.previousPercentDone = percentDone
 
@@ -167,11 +176,15 @@ if __name__ == "__main__":
 
     pattern = False
     outputFile = False
+    limit = False
     if len(sys.argv) >= 2:
         outputFile = sys.argv[1]
-    if len(sys.argv) == 3:
-        pattern = sys.argv[1]
+    if len(sys.argv) >= 3:
+        pattern = sys.argv[2]
         if pattern.lower() == "null" or pattern.lower() == "false":
             pattern = False
-    dataCol = DataCollector2(pattern, outputFile)
+    if len(sys.argv) == 4:
+        limit = sys.argv[3]
+
+    dataCol = DataCollector2(pattern, outputFile, limit)
     dataCol.collectData()
