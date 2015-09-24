@@ -61,6 +61,11 @@ class DataCollector2:
                 features = self.getFeatures(exp, type, indiv)
                 self.writeFeatures(exp, type, indiv, features)
 
+    def getIndividuals(self, experiment):
+        indivs = glob.glob(experiment[2] + os.path.sep + self.populationFolderNormal + os.path.sep + "*.vxa")
+        output = [(os.path.basename(indiv).split("_")[0], indiv) for indiv in indivs]
+        return output
+
     def getType(self, experiment):
         # if the alternative traces DON'T a disease then the main experiment DID have a disease
         if self.hasAltPopWithoutDisease(experiment):
@@ -87,6 +92,14 @@ class DataCollector2:
         if len(os.listdir(altPopPath)) > 0:
             return True
         return False
+
+    def getFeatures(self, experiment, type, indiv):
+        #TODO: implement different feature extractors
+        pass
+
+    def writeFeatures(self, experiment, type, indiv, features):
+        #TODO: implement CSV writer
+        pass
 
     @staticmethod
     def errorHasBothPopFiles(experiment):
