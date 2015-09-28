@@ -9,6 +9,7 @@ from featureExtractors.BasicInfo import BasicInfo
 from featureExtractors.DistanceAlt import DistanceAlt
 from featureExtractors.DistanceOriginal import DistanceOriginal
 from featureExtractors.MutProbability import MutProbability
+from featureExtractors.Lifetime import Lifetime
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -55,6 +56,7 @@ class DataCollector2:
         self.featureExtractors = [
             BasicInfo(),
             MutProbability(),
+            Lifetime(),
             DistanceOriginal(),
             DistanceAlt(),
             AbsoluteCellCount(),
