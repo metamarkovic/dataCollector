@@ -2,6 +2,7 @@ import csv
 import glob
 import re
 import os
+import cPickle as pickle
 from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
 from featureExtractors.RelativeCellCount import RelativeCellCount
 from featureExtractors.BasicInfo import BasicInfo
@@ -15,13 +16,15 @@ __author__ = 'meta'
 """ DataCollector 2 main script (rewrite of the original)
 
 This script can be run standalone with 2 optional command line parameters:
-[output file name] - (default: 'data.csv'), this defines the filename of the CSV output that this script generates
-[search pattern] - (default: '../EC14-Exp-1*'), this defines what folders are searched. Can also be set to "null" to use the default
+[output file name] - (string, default: 'data.csv'), this defines the filename of the CSV output that this script generates
+[search pattern] - (string, default: '../EC14-Exp-*'), this defines what folders are searched. Can also be set to "null" to use the default
+[limit] - (integer, default: no limit) max number of individuals to get for each experiment
+[continue] - (string, default: false) if this is "continue" or "true", then the data collection will not repeat completed experiments
 """
 
 
 class DataCollector2:
-    def __init__(self, pattern, outputFile, limit):
+    def __init__(self, pattern, outputFile, limit, cont):
         if not pattern:
             self.pattern = '../EC14-Exp-*'
         else:
@@ -34,8 +37,13 @@ class DataCollector2:
             self.limit = 10
         else:
             self.limit = limit
+        if not cont:
+            self.cont = False
+        else:
+            self.cont = True
+        print self.cont
 
-
+        self.experimentsDone = []
         self.rowCount = 0
         self.headers = []
         self.headersWritten = False
@@ -52,6 +60,7 @@ class DataCollector2:
             AbsoluteCellCount(),
             RelativeCellCount()
         ]
+        self.pickleLocation = os.path.dirname(os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
 
     def getExperiments(self):
         expFolders = glob.glob(self.pattern)
@@ -69,6 +78,8 @@ class DataCollector2:
 
     def collectData(self):
         experiments = self.getExperiments()
+        if self.cont:
+            experiments = self.filterExperimentsIfContinue(experiments)
         for exp in experiments:
             type = self.getType(exp)
             # print exp[0],type
@@ -84,9 +95,26 @@ class DataCollector2:
                 self.writeFeatures(features)
                 count += 1
                 self.printExperimentProgress(len(individuals), count)
+            self.saveProgress(exp)
 
         self.closeFile()
         print "wrote {} lines to {}".format(self.rowCount, self.outputFile)
+
+    def saveProgress(self, experiment):
+        self.experimentsDone.append(experiment)
+        if os.path.isfile(self.pickleLocation):
+            os.remove(self.pickleLocation)
+        pickle.dump(self.experimentsDone, open(self.pickleLocation, "wb"))
+
+    def loadProgress(self):
+        self.experimentsDone = pickle.load(open(self.pickleLocation, "rb"))
+
+    def filterExperimentsIfContinue(self, experiments):
+        print "Detected continue (don't collect data for completed experiments)"
+        self.loadProgress()
+        out = [experiment for experiment in experiments if experiment not in self.experimentsDone]
+        return out
+
 
     def getIndividuals(self, experiment):
         indivs = glob.glob(experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + "*.vxa")
@@ -139,9 +167,13 @@ class DataCollector2:
     def writeFeatures(self, features):
         if not self.headersWritten:
             self.headers = self.getFeatureHeader()
-            self.outputFileHandle = open(self.outputFile, "wb")
+            writeOption = "wb"
+            if self.cont:
+                writeOption = "ab"
+            self.outputFileHandle = open(self.outputFile, writeOption)
             self.writer = csv.DictWriter(self.outputFileHandle, fieldnames=self.headers)
-            self.writer.writeheader()
+            if not self.cont:
+                self.writer.writeheader()
             self.headersWritten = True
         self.rowCount += 1
         rowDict = dict(zip(self.headers, features))
@@ -178,14 +210,21 @@ if __name__ == "__main__":
     pattern = False
     outputFile = False
     limit = False
+    con = False
     if len(sys.argv) >= 2:
         outputFile = sys.argv[1]
     if len(sys.argv) >= 3:
         pattern = sys.argv[2]
         if pattern.lower() == "null" or pattern.lower() == "false":
             pattern = False
-    if len(sys.argv) == 4:
+    if len(sys.argv) >= 4:
         limit = sys.argv[3]
+    if len(sys.argv) == 5:
+        cont = sys.argv[4]
+        if cont.lower() in ["cont","continue","c","true","y"]:
+            con = True
+        else:
+            con = False
 
-    dataCol = DataCollector2(pattern, outputFile, limit)
+    dataCol = DataCollector2(pattern, outputFile, limit, con)
     dataCol.collectData()
