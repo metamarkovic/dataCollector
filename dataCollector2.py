@@ -3,6 +3,7 @@ import glob
 import re
 import os
 from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
+from featureExtractors.RelativeCellCount import RelativeCellCount
 from featureExtractors.BasicInfo import BasicInfo
 from featureExtractors.DistanceAlt import DistanceAlt
 from featureExtractors.DistanceOriginal import DistanceOriginal
@@ -48,7 +49,8 @@ class DataCollector2:
             MutProbability(),
             DistanceOriginal(),
             DistanceAlt(),
-            AbsoluteCellCount()
+            AbsoluteCellCount(),
+            RelativeCellCount()
         ]
 
     def getExperiments(self):
@@ -94,7 +96,10 @@ class DataCollector2:
     def getType(self, experiment):
         # if the alternative population DOES have a disease then the main experiment DIDN'T have a disease
         if self.hasAltPopWithDisease(experiment):
-            return "with disease"
+            if not self.hasAltPopWithoutDisease(experiment):
+                return "with disease"
+            else:
+                self.errorHasBothPopFiles(experiment)
         # if the alternative population DOESN'T have a disease then the main experiment DID have a disease
         if self.hasAltPopWithoutDisease(experiment):
             if not self.hasAltPopWithDisease(experiment):
