@@ -1,6 +1,6 @@
 import os
-from getDistanceForTraceFile import TraceDistance
-from distanceCalc import DistanceCalc
+from helpers.getDistanceForTraceFile import TraceDistance
+from helpers.distanceCalc import DistanceCalc
 import csv
 import glob
 import xml.etree.cElementTree as ET

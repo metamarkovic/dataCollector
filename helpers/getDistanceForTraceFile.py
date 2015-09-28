@@ -2,14 +2,18 @@ import sys
 import os
 from distanceCalc import DistanceCalc
 
-class TraceDistance():
-    def calcDistance(self, filename):
+
+class TraceDistance:
+
+    @staticmethod
+    def calcDistance(filename):
         dc = DistanceCalc()
         distEuclideanStep = dc.distanceStep(filename, "euclidean")
         distManhattanStep = dc.distanceStep(filename, "manhattan")
         distEuclideanTotal = dc.distanceTotal(filename, "euclidean")
         distManhattanTotal = dc.distanceTotal(filename, "manhattan")
         return [distEuclideanStep, distManhattanStep, distEuclideanTotal, distManhattanTotal]
+
 
 if __name__ == "__main__":
     if not len(sys.argv) == 2:
@@ -18,4 +22,3 @@ if __name__ == "__main__":
     dc = TraceDistance()
     distances = dc.calcDistance(filename)
     print " ".join([str(dist) for dist in distances])
-
