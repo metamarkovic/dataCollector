@@ -3,21 +3,19 @@ from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.config import PathConfig
 from helpers.getVoxelData import VoxelData
 
-
-class AbsoluteCellCount(FeatureExtractorAbstract):
+class MutProbability(FeatureExtractorAbstract):
     def getCSVheader(self):
-        return ["absCellCountFat", "absCellCountMuscle", "absCellCountBone"]
+        return ['probability']
 
     def extract(self, experiment, type, indiv):
-        noResultVal = ['NA', 'NA', 'NA']
         filepath = experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + indiv[0] + "_vox.vxa"
         if os.path.isfile(filepath):
             vd = VoxelData(filepath)
             absCounts = vd.getAbsCounts()
             if not absCounts:
-                return noResultVal
-
-            return [absCounts["fat"], absCounts["muscle"], absCounts["bone"]]
+                return ['NA']
+            probability = (absCounts["fat"] / 1000.0) * 0.5
+            return [probability]
 
         else:
-            return noResultVal
+            return ['NA']
