@@ -5,8 +5,8 @@ cat("\014") # clear the screen
 # load data files
 Ddata_ALL <- read.csv("data/data_DISEASE.csv")
 Ddata <- read.csv("data/data_DISEASE.cut.csv")
-Ldata_ALL <- read.csv("data/Ddata.csv")
-Ldata <- read.csv("data/Ddata.cut.csv")
+Ldata_ALL <- read.csv("data/data_LIFE.csv")
+Ldata <- read.csv("data/data_LIFE.cut.csv")
 
 # get the column names in each file
 colnames(Ddata)
