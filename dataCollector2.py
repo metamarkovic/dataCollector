@@ -30,19 +30,32 @@ class DataCollector2:
             self.pattern = '../EC14-Exp-*'
         else:
             self.pattern = pattern
+
         if not outputFile:
             self.outputFile = 'data.csv'
         else:
             self.outputFile = outputFile
+
         if not limit:
-            self.limit = 10
+            self.limit = 99999
         else:
-            self.limit = limit
+            self.limit = int(limit)
+
         if not cont:
             self.cont = False
         else:
             self.cont = True
-        print self.cont
+
+        print "Using the following parmeters:\n" \
+              "pattern: {pattern}\n" \
+              "output file: {outfile}\n" \
+              "limit: {limit}\n" \
+              "continue: {cont}".format(
+            pattern=self.pattern,
+            outfile=self.outputFile,
+            limit=self.limit,
+            cont=self.cont
+        )
 
         self.experimentsDone = []
         self.rowCount = 0
@@ -62,7 +75,8 @@ class DataCollector2:
             AbsoluteCellCount(),
             RelativeCellCount()
         ]
-        self.pickleLocation = os.path.dirname(os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
+        self.pickleLocation = os.path.dirname(
+            os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
 
     def getExperiments(self):
         expFolders = glob.glob(self.pattern)
@@ -116,7 +130,6 @@ class DataCollector2:
         self.loadProgress()
         out = [experiment for experiment in experiments if experiment not in self.experimentsDone]
         return out
-
 
     def getIndividuals(self, experiment):
         indivs = glob.glob(experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + "*.vxa")
@@ -223,7 +236,7 @@ if __name__ == "__main__":
         limit = sys.argv[3]
     if len(sys.argv) == 5:
         cont = sys.argv[4]
-        if cont.lower() in ["cont","continue","c","true","y"]:
+        if cont.lower() in ["cont", "continue", "c", "true", "y"]:
             con = True
         else:
             con = False
