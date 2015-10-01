@@ -16,16 +16,25 @@ class VoxelData:
 
     def __init__(self, filename):
         self.filename = filename
-        tree = ET.ElementTree(file=filename)
-        self.root = tree.getroot()
+        self.isValid = True
+        try:
+            tree = ET.ElementTree(file=filename)
+            self.root = tree.getroot()
+        except ET.ParseError:
+            self.isValid = False
+
 
     def getLifeTime(self):
+        if not self.isValid:
+            return False
         try:
             return self.root.find('Simulator').find('StopCondition').find('StopConditionValue').text
         except ET.ParseError:
             return False
 
     def getDNA(self):
+        if not self.isValid:
+            return False
         try:
             layers = self.root.find('VXC').find('Structure').find('Data').findall('Layer')
             self.dna = ""
@@ -36,6 +45,8 @@ class VoxelData:
             return False
 
     def getAbsCounts(self):
+        if not self.isValid:
+            return False
         if self.dna == "":
             res = self.getDNA()
             if not res:
@@ -49,6 +60,8 @@ class VoxelData:
         return out
 
     def getRelCounts(self):
+        if not self.isValid:
+            return False
         if self.absCounts == {}:
             res = self.getAbsCounts()
             if not res:
