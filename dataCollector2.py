@@ -150,7 +150,7 @@ class DataCollector2:
             else:
                 self.errorHasBothPopFiles(experiment)
         # if neither is the case, then there are no population files for this experiment... abort
-        self.errorHasNoPop()
+        self.errorHasNoPop(experiment)
 
     def hasAltPopWithoutDisease(self, experiment):
         return self.hasAltPop(experiment, "no disease")
