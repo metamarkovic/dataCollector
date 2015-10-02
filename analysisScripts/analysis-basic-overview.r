@@ -179,23 +179,23 @@ par(mfrow=c(2,3))
 
 plot(L_ID, L_rFat, main="(Relative) number of fat voxels over time in Life condition", 
      xlab="Individual ID", ylab="Number of fat voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(L_rFat~L_ID), col="red")
+abline(lm(L_rFat~L_ID), lwd=2, col="red")
 plot(L_ID, L_rMuscle, main="(Relative) number of Muscle voxels over time in Life conditon", 
      xlab="Individual ID", ylab="Number of Muscle voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(L_rMuscle~L_ID), col="blue")
+abline(lm(L_rMuscle~L_ID), lwd=2, col="blue")
 plot(L_ID, L_rBone, main="(Relative) number of bone voxels over time in Life conditon", 
      xlab="Individual ID", ylab="Number of bone voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(L_rBone~L_ID), col="green")
+abline(lm(L_rBone~L_ID), lwd=2, col="green")
 
 plot(D_ID, D_rFat, main="(Relative) number of fat voxels over time in Disease condition", 
      xlab="Individual ID", ylab="Number of fat voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(D_rFat~D_ID), col="red")
+abline(lm(D_rFat~D_ID), lwd=2, col="red")
 plot(D_ID, D_rMuscle, main="(Relative) number of Muscle voxels over time in Disease conditon", 
      xlab="Individual ID", ylab="Number of Muscle voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(D_rMuscle~D_ID), col="blue")
+abline(lm(D_rMuscle~D_ID), lwd=2, col="blue")
 plot(D_ID, D_rBone, main="(Relative) number of bone voxels over time in Disease conditon", 
      xlab="Individual ID", ylab="Number of bone voxels ", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
-abline(lm(D_rBone~D_ID), col="green")
+abline(lm(D_rBone~D_ID), lwd=2, col="green")
 dev.off()
 
 # absolute voxels
@@ -203,25 +203,25 @@ png(file = "graphs/absoluteVoxels_scatter.png", width=1500, height=800)
 attach(mtcars)
 par(mfrow=c(2,3))
 
-plot(L_ID, L_aFat, main="(Absolute) number of fat voxels over time in Disease condition", 
+plot(L_ID, L_aFat, main="(Absolute) number of fat voxels over time in Life condition", 
      xlab="Individual ID", ylab="Number of fat voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(L_aFat~L_ID), col="red")
-plot(L_ID, L_aMuscle, main="(Absolute) number of muscle voxels over time in Disease condition", 
+abline(lm(L_aFat~L_ID), lwd=2, col="red")
+plot(L_ID, L_aMuscle, main="(Absolute) number of muscle voxels over time in Life condition", 
      xlab="Individual ID", ylab="Number of muscle voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(L_aMuscle~L_ID), col="blue")
-plot(L_ID, L_aBone, main="(Absolute) number of bone voxels over time in Disease condition", 
+abline(lm(L_aMuscle~L_ID), lwd=2, col="blue")
+plot(L_ID, L_aBone, main="(Absolute) number of bone voxels over time in Life condition", 
      xlab="Individual ID", ylab="Number of bone voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(L_aBone~L_ID), col="green")
+abline(lm(L_aBone~L_ID), lwd=2, col="green")
 
 plot(D_ID, D_aFat, main="(Absolute) number of fat voxels over time in Disease condition", 
      xlab="Individual ID", ylab="Number of fat voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(D_aFat~D_ID), col="red")
+abline(lm(D_aFat~D_ID), lwd=2, col="red")
 plot(D_ID, D_aMuscle, main="(Absolute) number of muscle voxels over time in Disease condition", 
      xlab="Individual ID", ylab="Number of muscle voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(D_aMuscle~D_ID), col="blue")
+abline(lm(D_aMuscle~D_ID), lwd=2, col="blue")
 plot(D_ID, D_aBone, main="(Absolute) number of bone voxels over time in Disease condition", 
      xlab="Individual ID", ylab="Number of bone voxels ", xlim=c(0, 2100), ylim=c(0, 500), pch=1)
-abline(lm(D_aBone~D_ID), col="green")
+abline(lm(D_aBone~D_ID), lwd=2, col="green")
 dev.off()
 
 # linear models - voxels
@@ -244,6 +244,155 @@ lm(D_aFat~D_ID)
 lm(D_aMuscle~D_ID)
 lm(D_aBone~D_ID)
 
+################ DISTANCE TO TIME ################
+png(file = "graphs/stepDistance_ID.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,2))
+
+plot(L_ID, L_ES, main="Step distance traveled over time in Life condition", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(L_ES~L_ID), lwd=2, col="red")
+plot(L_ID, L_aES, main="Step distance traveled over time in alternative Life conditon", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(L_aES~L_ID), lwd=2, col="red")
+
+
+plot(D_ID, D_ES, main="Step distance traveled over time in Disease condition", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(D_ES~D_ID), lwd=2, col="green")
+plot(D_ID, D_aES, main="Step distance traveled over time in alternative in Disease conditon", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(D_aES~D_ID), lwd=2, col="green")
+dev.off()
+
+lm(L_aES~L_ID)
+lm(D_aES~D_ID)
+
+png(file = "graphs/totalDistance_ID.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,2))
+
+plot(L_ID, L_ET, main="Step distance traveled over time in Life condition", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(L_ET~L_ID), lwd=2, col="red")
+plot(L_ID, L_aET, main="Step distance traveled over time in alternative Life conditon", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(L_aET~L_ID), lwd=2, col="red")
+
+
+plot(D_ID, D_ET, main="Step distance traveled over time in Disease condition", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(D_ET~D_ID), lwd=2, col="green")
+plot(D_ID, D_aET, main="Step distance traveled over time in alternative in Disease conditon", 
+     xlab="Individual ID", ylab="Step distance traveled", xlim=c(0, 2100), ylim=c(0, 0.5), pch=1)
+abline(lm(D_aET~D_ID), lwd=2, col="green")
+dev.off()
+
+lm(L_aET~L_ID)
+lm(D_aET~D_ID)
+
+################ STEP DISTANCE COMPOSITION ################ 
+
+png(file = "graphs/stepDistLife_comp.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,3))
+
+plot(L_aFat, L_ES, main="(Absolute) number of fat voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_ES~L_aFat), lwd=2, col="red")
+plot(L_aMuscle, L_ES, main="(Absolute) number of muscle voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_ES~L_aMuscle), lwd=2, col="blue")
+plot(L_aBone, L_ES, main="(Absolute) number of bone voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_ES~L_aBone), lwd=2, col="green")
+
+plot(L_aFat, L_aES, main="(Absolute) number of fat voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_aES~L_aFat), lwd=2, col="red")
+plot(L_aMuscle, L_aES, main="(Absolute) number of muscle voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_aES~L_aMuscle), lwd=2, col="blue")
+plot(L_aBone, L_aES, main="(Absolute) number of bone voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0, 5), pch=1)
+abline(lm(L_aES~L_aBone), lwd=2, col="green")
+dev.off()
+
+png(file = "graphs/stepDistLife_relComp_closeup.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,3))
+
+plot(L_rFat, L_ES, main="(Absolute) number of fat voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_ES~L_rFat), lwd=2, col="red")
+plot(L_rMuscle, L_ES, main="(Absolute) number of muscle voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_ES~L_rMuscle), lwd=2, col="blue")
+plot(L_rBone, L_ES, main="(Absolute) number of bone voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_ES~L_rBone), lwd=2, col="green")
+
+plot(L_rFat, L_aES, main="(Absolute) number of fat voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_aES~L_rFat), lwd=2, col="red")
+plot(L_rMuscle, L_aES, main="(Absolute) number of muscle voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_aES~L_rMuscle), lwd=2, col="blue")
+plot(L_rBone, L_aES, main="(Absolute) number of bone voxels over time in Life condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0,1), pch=1)
+abline(lm(L_aES~L_rBone), lwd=2, col="green")
+dev.off()
+
+png(file = "graphs/stepDistDisease_comp.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,3))
+
+plot(D_aFat, D_ES, main="(Absolute) number of fat voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_ES~D_aFat), lwd=2, col="red")
+plot(D_aMuscle, D_ES, main="(Absolute) number of muscle voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_ES~D_aMuscle), lwd=2, col="blue")
+plot(D_aBone, D_ES, main="(Absolute) number of bone voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_ES~D_aBone), lwd=2, col="green")
+
+plot(D_aFat, D_aES, main="(Absolute) number of fat voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_aES~D_aFat), lwd=2, col="red")
+plot(D_aMuscle, D_aES, main="(Absolute) number of muscle voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_aES~D_aMuscle), lwd=2, col="blue")
+plot(D_aBone, D_aES, main="(Absolute) number of bone voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0, 5), pch=1)
+abline(lm(D_aES~D_aBone), lwd=2, col="green")
+dev.off()
+
+png(file = "graphs/stepDistDisease_relComp_closeup.png", width=1500, height=800)
+attach(mtcars)
+par(mfrow=c(2,3))
+
+plot(D_rFat, D_ES, main="(Absolute) number of fat voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_ES~D_rFat), lwd=2, col="red")
+plot(D_rMuscle, D_ES, main="(Absolute) number of muscle voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_ES~D_rMuscle), lwd=2, col="blue")
+plot(D_rBone, D_ES, main="(Absolute) number of bone voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_ES~D_rBone), lwd=2, col="green")
+
+plot(D_rFat, D_aES, main="(Absolute) number of fat voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of fat voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_aES~D_rFat), lwd=2, col="red")
+plot(D_rMuscle, D_aES, main="(Absolute) number of muscle voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of muscle voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_aES~D_rMuscle), lwd=2, col="blue")
+plot(D_rBone, D_aES, main="(Absolute) number of bone voxels over time in Disease condition", 
+     xlab="Step distance traveled", ylab="Number of bone voxels ", ylim=c(0,1), pch=1)
+abline(lm(D_aES~D_rBone), lwd=2, col="green")
+dev.off()
+
 ################ STEP DISTANCE TO PROBABILITY ################ 
 
 # all together now
@@ -253,19 +402,19 @@ par(mfrow=c(2,2))
 
 plot(L_prob, L_ES, type="p", main="Distance to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 6))
-abline(lm(L_ES~L_prob), col="blue")
+abline(lm(L_ES~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_ES, type="p", main="Distance to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 0.5))
-abline(lm(D_ES~D_prob), col="green")
+abline(lm(D_ES~D_prob), lwd=2, col="green")
 
 plot(L_prob, L_aES, type="p", main="Distance to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 6))
-abline(lm(L_aES~L_prob), col="blue")
+abline(lm(L_aES~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_aES, type="p", main="Distance to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 0.5))
-abline(lm(D_aES~D_prob), col="green")
+abline(lm(D_aES~D_prob), lwd=2, col="green")
 dev.off()
 
 # only life
@@ -275,11 +424,11 @@ par(mfrow=c(1,2))
 
 plot(L_prob, L_ES, type="p", main="Distance to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 2))
-abline(lm(L_ES~L_prob), col="blue")
+abline(lm(L_ES~L_prob), lwd=2, col="blue")
 
 plot(L_prob, L_aES, type="p", main="Distance to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 2))
-abline(lm(L_aES~L_prob), col="blue")
+abline(lm(L_aES~L_prob), lwd=2, col="blue")
 dev.off()
 
 # only disease
@@ -289,11 +438,11 @@ par(mfrow=c(1,2))
 
 plot(D_prob, D_ES, type="p", main="Distance to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 0.5))
-abline(lm(D_ES~D_prob), col="green")
+abline(lm(D_ES~D_prob), lwd=2, col="green")
 
 plot(D_prob, D_aES, type="p", main="Distance to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step distance", pch=1, ylim=c(0, 0.5))
-abline(lm(D_aES~D_prob), col="green")
+abline(lm(D_aES~D_prob), lwd=2, col="green")
 dev.off()
 
 ################ TOTAL DISTANCE TO PROBABILITY ################ 
@@ -305,19 +454,19 @@ par(mfrow=c(2,2))
 
 plot(L_prob, L_ET, type="p", main="Total distance to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(L_ET~L_prob), col="blue")
+abline(lm(L_ET~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_ET, type="p", main="Total distance to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(D_ET~D_prob), col="green")
+abline(lm(D_ET~D_prob), lwd=2, col="green")
 
 plot(L_prob, L_aET, type="p", main="Total distance to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(L_aET~L_prob), col="blue")
+abline(lm(L_aET~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_aET, type="p", main="Total distance to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(D_aET~D_prob), col="green")
+abline(lm(D_aET~D_prob), lwd=2, col="green")
 dev.off()
 
 # only life
@@ -327,11 +476,11 @@ par(mfrow=c(1,2))
 
 plot(L_prob, L_ET, type="p", main="Total distance to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(L_ET~L_prob), col="blue")
+abline(lm(L_ET~L_prob), lwd=2, col="blue")
 
 plot(L_prob, L_aET, type="p", main="Total distance to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(L_aET~L_prob), col="blue")
+abline(lm(L_aET~L_prob), lwd=2, col="blue")
 dev.off()
 
 # only disease
@@ -341,11 +490,11 @@ par(mfrow=c(1,2))
 
 plot(D_prob, D_ET, type="p", main="Total distance to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(D_ET~D_prob), col="green")
+abline(lm(D_ET~D_prob), lwd=2, col="green")
 
 plot(D_prob, D_aET, type="p", main="Total distance to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total distance", pch=1, ylim=c(0, 0.4))
-abline(lm(D_aET~D_prob), col="green")
+abline(lm(D_aET~D_prob), lwd=2, col="green")
 dev.off()
 
 ################ STEP SPEED TO PROBABILITY ################ 
@@ -357,19 +506,19 @@ par(mfrow=c(2,2))
 
 plot(L_prob, L_ESspeed, type="p", main="Step speed to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 6))
-abline(lm(L_ESspeed~L_prob), col="blue")
+abline(lm(L_ESspeed~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_ESspeed, type="p", main="Step speed to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 6))
-abline(lm(D_ESspeed~D_prob), col="green")
+abline(lm(D_ESspeed~D_prob), lwd=2, col="green")
 
 plot(L_prob, L_aESspeed, type="p", main="Step speed to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 6))
-abline(lm(L_aESspeed~L_prob), col="blue")
+abline(lm(L_aESspeed~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_aESspeed, type="p", main="Step speed to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 6))
-abline(lm(D_aESspeed~D_prob), col="green")
+abline(lm(D_aESspeed~D_prob), lwd=2, col="green")
 dev.off()
 
 # only life
@@ -379,11 +528,11 @@ par(mfrow=c(1,2))
 
 plot(L_prob, L_ESspeed, type="p", main="Step speed to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 2))
-abline(lm(L_ESspeed~L_prob), col="blue")
+abline(lm(L_ESspeed~L_prob), lwd=2, col="blue")
 
 plot(L_prob, L_aESspeed, type="p", main="Step speed to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 2))
-abline(lm(L_aESspeed~L_prob), col="blue")
+abline(lm(L_aESspeed~L_prob), lwd=2, col="blue")
 dev.off()
 
 # only disease
@@ -393,11 +542,11 @@ par(mfrow=c(1,2))
 
 plot(D_prob, D_ESspeed, type="p", main="Step speed to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 2))
-abline(lm(D_ESspeed~D_prob), col="green")
+abline(lm(D_ESspeed~D_prob), lwd=2, col="green")
 
 plot(D_prob, D_aESspeed, type="p", main="Step speed to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean step speed", pch=1, ylim=c(0, 2))
-abline(lm(D_aESspeed~D_prob), col="green")
+abline(lm(D_aESspeed~D_prob), lwd=2, col="green")
 dev.off()
 
 ################ TOTAL TO PROBABILITY ################ 
@@ -409,19 +558,19 @@ par(mfrow=c(2,2))
 
 plot(L_prob, L_ETspeed, type="p", main="Total speed to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(L_ETspeed~L_prob), col="blue")
+abline(lm(L_ETspeed~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_ETspeed, type="p", main="Total speed to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(D_ETspeed~D_prob), col="green")
+abline(lm(D_ETspeed~D_prob), lwd=2, col="green")
 
 plot(L_prob, L_aETspeed, type="p", main="Total speed to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(L_aETspeed~L_prob), col="blue")
+abline(lm(L_aETspeed~L_prob), lwd=2, col="blue")
 
 plot(D_prob, D_aETspeed, type="p", main="Total speed to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(D_aETspeed~D_prob), col="green")
+abline(lm(D_aETspeed~D_prob), lwd=2, col="green")
 dev.off()
 
 # only life
@@ -431,11 +580,11 @@ par(mfrow=c(1,2))
 
 plot(L_prob, L_ETspeed, type="p", main="Total speed to probability for Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(L_ETspeed~L_prob), col="blue")
+abline(lm(L_ETspeed~L_prob), lwd=2, col="blue")
 
 plot(L_prob, L_aETspeed, type="p", main="Total speed to probability for alternative Life condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(L_aETspeed~L_prob), col="blue")
+abline(lm(L_aETspeed~L_prob), lwd=2, col="blue")
 dev.off()
 
 # only disease
@@ -445,11 +594,11 @@ par(mfrow=c(1,2))
 
 plot(D_prob, D_ETspeed, type="p", main="Total speed to probability for Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(D_ETspeed~D_prob), col="green")
+abline(lm(D_ETspeed~D_prob), lwd=2, col="green")
 
 plot(D_prob, D_aETspeed, type="p", main="Total speed to probability for alternative Disease condition", 
      xlab="Probability of mutation ", ylab="Euclidean total speed", pch=1, ylim=c(0, 0.2))
-abline(lm(D_aETspeed~D_prob), col="green")
+abline(lm(D_aETspeed~D_prob), lwd=2, col="green")
 dev.off()
 
 ################ QUANTILES ################ 
