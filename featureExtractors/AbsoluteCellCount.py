@@ -6,10 +6,10 @@ from helpers.getVoxelData import VoxelData
 
 class AbsoluteCellCount(FeatureExtractorAbstract):
     def getCSVheader(self):
-        return ["absCellCountFat", "absCellCountMuscle", "absCellCountBone"]
+        return ["absCellCountFat", "absCellCountMuscle", "absCellCountBone", "absCellCount"]
 
     def extract(self, experiment, type, indiv):
-        noResultVal = ['NA', 'NA', 'NA']
+        noResultVal = ['NA'] * 4
         filepath = experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + indiv[0] + "_vox.vxa"
         if os.path.isfile(filepath):
             vd = VoxelData(filepath)
@@ -17,7 +17,7 @@ class AbsoluteCellCount(FeatureExtractorAbstract):
             if not absCounts:
                 return noResultVal
 
-            return [absCounts["fat"], absCounts["muscle"], absCounts["bone"]]
+            return [absCounts["fat"], absCounts["muscle"], absCounts["bone"], sum(absCounts.values())]
 
         else:
             return noResultVal

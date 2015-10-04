@@ -1,10 +1,11 @@
 import xml.etree.cElementTree as ET
-
+import numpy as np
 
 class VoxelData:
     filename = ""
     root = None
     dna = ""
+    dnaMatrix = ""
     types = {
         "fat": [1],
         "bone": [2],
@@ -43,6 +44,23 @@ class VoxelData:
             return self.dna
         except ET.ParseError:
             return False
+
+    def getDNAmatrix(self):
+        if not self.isValid:
+            return False
+        if self.dna == "":
+            res = self.getDNA()
+            if not res:
+                return False
+        dnaRows = self._splitEveryN(self.dna, 100)
+        dnaCols = [self._splitEveryN(layer, 10) for layer in dnaRows]
+        self.dnaMatrix = np.asarray([[self._splitEveryN(row, 1) for row in column] for column in dnaCols])
+        return self.dnaMatrix
+
+
+    @staticmethod
+    def _splitEveryN(line, n):
+        return [line[i:i+n] for i in range(0, len(line), n)]
 
     def getAbsCounts(self):
         if not self.isValid:
