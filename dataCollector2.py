@@ -11,6 +11,7 @@ from featureExtractors.DistanceOriginal import DistanceOriginal
 from featureExtractors.MutProbability import MutProbability
 from featureExtractors.Lifetime import Lifetime
 from featureExtractors.SizeOnAxis import SizeOnAxis
+from featureExtractors.RelHeight import RelHeight
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -75,7 +76,8 @@ class DataCollector2:
             DistanceAlt(),
             AbsoluteCellCount(),
             RelativeCellCount(),
-            SizeOnAxis()
+            SizeOnAxis(),
+            RelHeight()
         ]
         self.pickleLocation = os.path.dirname(
             os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
