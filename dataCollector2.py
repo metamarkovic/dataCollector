@@ -14,6 +14,7 @@ from featureExtractors.SizeOnAxis import SizeOnAxis
 from featureExtractors.RelHeight import RelHeight
 from featureExtractors.MuscleLocation import MuscleLocation
 from featureExtractors.Symmetry import Symmetry
+from featureExtractors.Arc import Arc
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -81,7 +82,8 @@ class DataCollector2:
             SizeOnAxis(),
             RelHeight(),
             MuscleLocation(),
-            Symmetry()
+            Symmetry(),
+            Arc()
         ]
         self.pickleLocation = os.path.dirname(
             os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
