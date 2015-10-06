@@ -106,8 +106,12 @@ class DataCollector2:
 
     def collectData(self):
         experiments = self.getExperiments()
+        print "I found the following experiments: \n",[exp[0] for exp in experiments]
         if self.cont:
             experiments = self.filterExperimentsIfContinue(experiments)
+            print "Because the 'continue' flag was set, I will only parse the following\n" \
+                  " experiments (because I think I already did the other ones before):\n",\
+                [exp[0] for exp in experiments]
         for exp in experiments:
             type = self.getType(exp)
             # print exp[0],type
@@ -138,7 +142,6 @@ class DataCollector2:
         self.experimentsDone = pickle.load(open(self.pickleLocation, "rb"))
 
     def filterExperimentsIfContinue(self, experiments):
-        print "Detected continue (don't collect data for completed experiments)"
         self.loadProgress()
         out = [experiment for experiment in experiments if experiment not in self.experimentsDone]
         return out
