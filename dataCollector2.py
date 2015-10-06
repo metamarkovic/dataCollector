@@ -10,6 +10,12 @@ from featureExtractors.DistanceAlt import DistanceAlt
 from featureExtractors.DistanceOriginal import DistanceOriginal
 from featureExtractors.MutProbability import MutProbability
 from featureExtractors.Lifetime import Lifetime
+from featureExtractors.SizeOnAxis import SizeOnAxis
+from featureExtractors.RelHeight import RelHeight
+from featureExtractors.MuscleLocation import MuscleLocation
+from featureExtractors.Symmetry import Symmetry
+from featureExtractors.Arc import Arc
+from featureExtractors.Monotony import Monotony
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -73,7 +79,13 @@ class DataCollector2:
             DistanceOriginal(),
             DistanceAlt(),
             AbsoluteCellCount(),
-            RelativeCellCount()
+            RelativeCellCount(),
+            SizeOnAxis(),
+            RelHeight(),
+            MuscleLocation(),
+            Symmetry(),
+            Arc(),
+            Monotony()
         ]
         self.pickleLocation = os.path.dirname(
             os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
@@ -150,7 +162,7 @@ class DataCollector2:
             else:
                 self.errorHasBothPopFiles(experiment)
         # if neither is the case, then there are no population files for this experiment... abort
-        self.errorHasNoPop()
+        self.errorHasNoPop(experiment)
 
     def hasAltPopWithoutDisease(self, experiment):
         return self.hasAltPop(experiment, "no disease")
