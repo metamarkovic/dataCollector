@@ -30,5 +30,8 @@ class RelHeight(FeatureExtractorAbstract):
                         continue
                 relHeight.append(float(lineSplit[4]))
 
-        result = float(sum(relHeight))/len(relHeight)
+        if len(relHeight) > 0:
+            result = float(sum(relHeight))/len(relHeight)
+        else:
+            result = 0
         return [result]
