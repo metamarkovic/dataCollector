@@ -20,7 +20,7 @@ from helpers.config import PathConfig
 
 __author__ = 'meta'
 
-""" DataCollector 2 main script (rewrite of the original)
+docString = """ DataCollector 2 main script (rewrite of the original)
 
 This script can be run standalone with 2 optional command line parameters:
 [output file name] - (string, default: 'data.csv'), this defines the filename of the CSV output that this script generates
@@ -106,11 +106,11 @@ class DataCollector2:
 
     def collectData(self):
         experiments = self.getExperiments()
-        print "I found the following experiments: \n",[exp[0] for exp in experiments]
+        print "I found the following experiments: \n", [exp[0] for exp in experiments]
         if self.cont:
             experiments = self.filterExperimentsIfContinue(experiments)
             print "Because the 'continue' flag was set, I will only parse the following\n" \
-                  " experiments (because I think I already did the other ones before):\n",\
+                  " experiments (because I think I already did the other ones before):\n", \
                 [exp[0] for exp in experiments]
         for exp in experiments:
             type = self.getType(exp)
@@ -210,7 +210,8 @@ class DataCollector2:
         self.writer.writerow(rowDict)
 
     def closeFile(self):
-        self.outputFileHandle.close()
+        if not not self.outputFileHandle:
+            self.outputFileHandle.close()
 
     def getFeatureHeader(self):
         output = []
@@ -236,6 +237,10 @@ class DataCollector2:
 
 if __name__ == "__main__":
     import sys
+
+    if len(sys.argv) == 1:
+        print docString
+        quit()
 
     pattern = False
     outputFile = False
