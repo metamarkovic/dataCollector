@@ -23,7 +23,7 @@ else:
           "The default (if omitted) is 2000 (duh).\n"
 
 if len(sys.argv) == 3:
-    cutNumber = sys.argv[2]
+    cutNumber = int(sys.argv[2])
 
 filenameSplit = inFile.split(".")
 outFile = ".".join(filenameSplit[:-1])+".cut.csv"
@@ -46,7 +46,7 @@ with open(outFile, 'w') as ouf:
             if exp == "" or lineExp != exp:
                 exp = lineExp
                 expCounter = 0
-            if expCounter < 2000:
+            if expCounter < cutNumber:
                 ouf.write(line)
             expCounter += 1
 

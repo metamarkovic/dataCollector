@@ -149,6 +149,7 @@ class DataCollector2:
     def getIndividuals(self, experiment):
         indivs = glob.glob(experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + "*.vxa")
         output = [(os.path.basename(indiv).split("_")[0], indiv) for indiv in indivs]
+        output.sort(key=lambda x: int(x[0]))
         return output
 
     def getType(self, experiment):
