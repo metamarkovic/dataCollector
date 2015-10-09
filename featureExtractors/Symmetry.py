@@ -38,22 +38,32 @@ class Symmetry(FeatureExtractorAbstract):
                             (9-z,y,9-x)
                         ]
                         mirrors = list(set(mirrors))
-                        toCheck += zip(mirrors, [val]*len(mirrors))
+                        cellHash = str(x)+'-'+str(y)+'-'+str(z)
+                        toCheck += zip(mirrors, [val]*len(mirrors), [cellHash]*len(mirrors))
 
         sameExisting = 0
         missing = 0
         counterExisting = 0
+        musclesChecked = []
         for toCheckLocation in toCheck:
             val = toCheckLocation[1]
+            knownMuscle = False
+            if toCheckLocation[2] in musclesChecked:
+                knownMuscle = True
             opposite = 4
             if val == 4:
                 opposite = 3
-            if int(dnaMatrix[toCheckLocation[0][0], toCheckLocation[0][1], toCheckLocation[0][2]]) == val:
+            x,y,z = toCheckLocation[0]
+            if int(dnaMatrix[x, y, z]) == val:
                 sameExisting += 1
-            elif int(dnaMatrix[toCheckLocation[0][0], toCheckLocation[0][1], toCheckLocation[0][2]]) == opposite:
+            elif int(dnaMatrix[x, y, z]) == opposite:
                 counterExisting += 1
             else:
-                missing += 1
+                if not knownMuscle:
+                    missing += 1
+
+            if not knownMuscle:
+                musclesChecked.append(toCheckLocation[2])
 
         return [sameExisting, counterExisting, missing]
 
