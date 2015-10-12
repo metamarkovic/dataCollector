@@ -27,9 +27,15 @@ class DistanceCalc:
                     x_diff = x - x_new
                     y_diff = y - y_new
                     if abs(x_diff) >= self.arenaSize[0]*0.8:
-                        x_diff -= self.arenaSize[0]
+                        if x_new > x:
+                            x_diff += self.arenaSize[0]
+                        else:
+                            x_diff -= self.arenaSize[0]
                     if abs(y_diff) >= self.arenaSize[1]*0.8:
-                        y_diff -= self.arenaSize[1]
+                        if y_new > y:
+                            y_diff += self.arenaSize[1]
+                        else:
+                            y_diff -= self.arenaSize[1]
                     if type == "euclidean":
                         dist += math.sqrt((x_diff ** 2) + (y_diff ** 2))
                     if type == "manhattan":
