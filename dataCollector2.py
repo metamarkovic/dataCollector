@@ -16,6 +16,7 @@ from featureExtractors.MuscleLocation import MuscleLocation
 from featureExtractors.Symmetry import Symmetry
 from featureExtractors.Arc import Arc
 from featureExtractors.Monotony import Monotony
+from featureExtractors.Gait import Gait
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -85,7 +86,8 @@ class DataCollector2:
             MuscleLocation(),
             Symmetry(),
             Arc(),
-            Monotony()
+            Monotony(),
+            Gait()
         ]
         self.pickleLocation = os.path.dirname(
             os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
