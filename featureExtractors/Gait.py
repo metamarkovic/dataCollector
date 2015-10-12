@@ -40,6 +40,8 @@ class Gait(FeatureExtractorAbstract):
 
     @staticmethod
     def _getPeriod(signal):
+        if len(signal) == 0:
+            return 'NA'
         z_fft = np.fft.rfft(signal).real
         z_fft = z_fft[range(len(z_fft) / 2 + 1)]
         period = np.argmax(z_fft[1:]) + 1
