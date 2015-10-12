@@ -2,6 +2,7 @@ import os
 from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.getDistanceForTraceFile import TraceDistance
 
+
 class DistanceOriginal(FeatureExtractorAbstract):
     def getCSVheader(self):
         return ['euclideanStep', 'manhattanStep', 'euclideanTotal', 'manhattanTotal']
@@ -11,4 +12,4 @@ class DistanceOriginal(FeatureExtractorAbstract):
         if os.path.isfile(filepath):
             return TraceDistance.calcDistance(filepath)
         else:
-            return ["NA"]*4
+            return ["NA"] * 4

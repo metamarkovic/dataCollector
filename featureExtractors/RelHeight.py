@@ -3,6 +3,7 @@ from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.config import PathConfig
 from helpers.distanceCalc import DistanceCalc
 
+
 class RelHeight(FeatureExtractorAbstract):
     def getCSVheader(self):
         return ['relHeight']
@@ -11,7 +12,8 @@ class RelHeight(FeatureExtractorAbstract):
         filepath = experiment[2] + os.path.sep + PathConfig.traceFolderNormal + os.path.sep + indiv[0] + ".trace"
         dc = DistanceCalc()
         if not os.path.isfile(filepath):
-            filepath = experiment[2] + os.path.sep + PathConfig.traceFoldersAlt[type] + os.path.sep + indiv[0] + ".trace"
+            filepath = experiment[2] + os.path.sep + PathConfig.traceFoldersAlt[type] + os.path.sep + indiv[
+                0] + ".trace"
             if not os.path.isfile(filepath):
                 return ['NA']
         with open(filepath, 'r') as inputFile:
@@ -31,7 +33,7 @@ class RelHeight(FeatureExtractorAbstract):
                 relHeight.append(float(lineSplit[4]))
 
         if len(relHeight) > 0:
-            result = float(sum(relHeight))/len(relHeight)
+            result = float(sum(relHeight)) / len(relHeight)
         else:
             result = 0
         return [result]

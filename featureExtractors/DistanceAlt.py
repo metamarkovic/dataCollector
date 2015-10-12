@@ -20,4 +20,4 @@ class DistanceAlt(FeatureExtractorAbstract):
                 return TraceDistance.calcDistance(filepath.format(tPath))
             else:
                 print "WARN: couldn't find alt trace file for experiment {}, indiv {}".format(experiment[0], indiv[0])
-                return ["NA"]*4
+                return ["NA"] * 4

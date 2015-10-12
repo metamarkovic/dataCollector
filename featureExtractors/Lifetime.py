@@ -3,6 +3,7 @@ from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.config import PathConfig
 from helpers.getVoxelData import VoxelData
 
+
 class Lifetime(FeatureExtractorAbstract):
     def getCSVheader(self):
         return ['lifetime']

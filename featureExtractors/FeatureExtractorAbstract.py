@@ -18,4 +18,3 @@ class FeatureExtractorAbstract:
         :return: list of feature values
         """
         raise NotImplementedError("FeatureExtractor %s doesn't implement extract()" % (self.__class__.__name__))
-

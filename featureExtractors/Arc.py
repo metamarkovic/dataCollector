@@ -18,7 +18,7 @@ class Arc(FeatureExtractorAbstract):
         return ['traceArcRadius', 'traceArcPercent']
 
     def extract(self, experiment, type, indiv):
-        errorReturnVal = ['NA']*2
+        errorReturnVal = ['NA'] * 2
         filepath = experiment[2] + os.path.sep + PathConfig.traceFolderNormal + os.path.sep + indiv[0] + ".trace"
         dc = DistanceCalc()
         if not os.path.isfile(filepath):
@@ -89,7 +89,6 @@ class Arc(FeatureExtractorAbstract):
     def _getCircumference(self):
         self.circumference = 2 * math.pi * self.radius
         return self.circumference
-
 
 
 if __name__ == "__main__":

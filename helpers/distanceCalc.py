@@ -26,12 +26,12 @@ class DistanceCalc:
                     y_new = float(lineSplit[3])
                     x_diff = x - x_new
                     y_diff = y - y_new
-                    if abs(x_diff) >= self.arenaSize[0]*0.8:
+                    if abs(x_diff) >= self.arenaSize[0] * 0.8:
                         if x_new > x:
                             x_diff += self.arenaSize[0]
                         else:
                             x_diff -= self.arenaSize[0]
-                    if abs(y_diff) >= self.arenaSize[1]*0.8:
+                    if abs(y_diff) >= self.arenaSize[1] * 0.8:
                         if y_new > y:
                             y_diff += self.arenaSize[1]
                         else:
@@ -69,12 +69,12 @@ class DistanceCalc:
                     y_new = float(lineSplit[3])
                     x_diff = x - x_new
                     y_diff = y - y_new
-                    if abs(x_diff) >= self.arenaSize[0]*0.8:
+                    if abs(x_diff) >= self.arenaSize[0] * 0.8:
                         diff_to_add = self.arenaSize[0]
                         if x_new > x:
                             diff_to_add = -diff_to_add
                         x_diffs_to_add.append(diff_to_add)
-                    if abs(y_diff) >= self.arenaSize[1]*0.8:
+                    if abs(y_diff) >= self.arenaSize[1] * 0.8:
                         diff_to_add = self.arenaSize[1]
                         if y_new > y:
                             diff_to_add = -diff_to_add
