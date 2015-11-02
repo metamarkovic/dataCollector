@@ -3,8 +3,10 @@ import glob
 import re
 import os
 import cPickle as pickle
-from featureExtractors.AbsoluteCellCount import AbsoluteCellCount
-from featureExtractors.RelativeCellCount import RelativeCellCount
+from featureExtractors.AbsoluteCellCountOriginal import AbsoluteCellCountOriginal
+from featureExtractors.RelativeCellCountOriginal import RelativeCellCountOriginal
+from featureExtractors.AbsoluteCellCountAlt import AbsoluteCellCountAlt
+from featureExtractors.RelativeCellCountAlt import RelativeCellCountAlt
 from featureExtractors.BasicInfo import BasicInfo
 from featureExtractors.DistanceAlt import DistanceAlt
 from featureExtractors.DistanceOriginal import DistanceOriginal
@@ -79,8 +81,10 @@ class DataCollector2:
             Lifetime(),
             DistanceOriginal(),
             DistanceAlt(),
-            AbsoluteCellCount(),
-            RelativeCellCount(),
+            AbsoluteCellCountOriginal(),
+            RelativeCellCountOriginal(),
+            AbsoluteCellCountAlt(),
+            RelativeCellCountAlt(),
             SizeOnAxis(),
             RelHeight(),
             MuscleLocation(),

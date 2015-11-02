@@ -2,16 +2,17 @@ import os
 from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.config import PathConfig
 from helpers.getVoxelData import VoxelData
+from helpers.getAltFile import GetAltFile
 
 
-class AbsoluteCellCount(FeatureExtractorAbstract):
+class AbsoluteCellCountAlt(FeatureExtractorAbstract):
     def getCSVheader(self):
-        return ["absCellCountFat", "absCellCountMuscle", "absCellCountBone", "absCellCount"]
+        return ["absCellCountFatAlt", "absCellCountMuscleAlt", "absCellCountBoneAlt", "absCellCountAlt"]
 
     def extract(self, experiment, type, indiv):
         noResultVal = ['NA'] * 4
-        filepath = experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + indiv[0] + "_vox.vxa"
-        if os.path.isfile(filepath):
+        filepath = GetAltFile.getAltPopFile(experiment, type, indiv)
+        if filepath != False:
             vd = VoxelData(filepath)
             absCounts = vd.getAbsCounts()
             if not absCounts:
