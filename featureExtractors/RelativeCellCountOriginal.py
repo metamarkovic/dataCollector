@@ -4,18 +4,19 @@ from helpers.config import PathConfig
 from helpers.getVoxelData import VoxelData
 
 
-class Lifetime(FeatureExtractorAbstract):
+class RelativeCellCountOriginal(FeatureExtractorAbstract):
     def getCSVheader(self):
-        return ['lifetime']
+        return ["relCellCountFat", "relCellCountMuscle", "relCellCountBone"]
 
     def extract(self, experiment, type, indiv):
+        noResultVal = ['NA', 'NA', 'NA']
         filepath = experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + indiv[0] + "_vox.vxa"
         if os.path.isfile(filepath):
             vd = VoxelData(filepath)
-            lifetime = vd.getLifeTime()
-            if not lifetime:
-                return ['NA']
-            return [lifetime]
+            relCounts = vd.getRelCounts()
+            if not relCounts:
+                return noResultVal
 
+            return [relCounts["fat"], relCounts["muscle"], relCounts["bone"]]
         else:
-            return ['NA']
+            return noResultVal

@@ -4,18 +4,20 @@ from helpers.config import PathConfig
 from helpers.getVoxelData import VoxelData
 
 
-class Lifetime(FeatureExtractorAbstract):
+class AbsoluteCellCountOriginal(FeatureExtractorAbstract):
     def getCSVheader(self):
-        return ['lifetime']
+        return ["absCellCountFat", "absCellCountMuscle", "absCellCountBone", "absCellCount"]
 
     def extract(self, experiment, type, indiv):
+        noResultVal = ['NA'] * 4
         filepath = experiment[2] + os.path.sep + PathConfig.populationFolderNormal + os.path.sep + indiv[0] + "_vox.vxa"
         if os.path.isfile(filepath):
             vd = VoxelData(filepath)
-            lifetime = vd.getLifeTime()
-            if not lifetime:
-                return ['NA']
-            return [lifetime]
+            absCounts = vd.getAbsCounts()
+            if not absCounts:
+                return noResultVal
+
+            return [absCounts["fat"], absCounts["muscle"], absCounts["bone"], sum(absCounts.values())]
 
         else:
-            return ['NA']
+            return noResultVal

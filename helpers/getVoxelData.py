@@ -1,6 +1,7 @@
 import xml.etree.cElementTree as ET
 import numpy as np
 
+
 class VoxelData:
     filename = ""
     root = None
@@ -23,7 +24,6 @@ class VoxelData:
             self.root = tree.getroot()
         except ET.ParseError:
             self.isValid = False
-
 
     def getLifeTime(self):
         if not self.isValid:
@@ -57,10 +57,9 @@ class VoxelData:
         self.dnaMatrix = np.asarray([[self._splitEveryN(row, 1) for row in column] for column in dnaCols])
         return self.dnaMatrix
 
-
     @staticmethod
     def _splitEveryN(line, n):
-        return [line[i:i+n] for i in range(0, len(line), n)]
+        return [line[i:i + n] for i in range(0, len(line), n)]
 
     def getAbsCounts(self):
         if not self.isValid:
@@ -87,7 +86,7 @@ class VoxelData:
         out = {}
         totalCount = sum(self.absCounts.values())
         for typeName, typeNumbers in self.types.iteritems():
-            out[typeName] = round(float(self.absCounts[typeName])/totalCount,3)
+            out[typeName] = round(float(self.absCounts[typeName]) / totalCount, 3)
         self.relCounts = out
         return out
 
@@ -100,4 +99,3 @@ if __name__ == "__main__":
     print len(dna)
     print vd.getAbsCounts()
     print vd.getRelCounts()
-

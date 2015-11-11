@@ -4,7 +4,6 @@ from distanceCalc import DistanceCalc
 
 
 class TraceDistance:
-
     @staticmethod
     def calcDistance(filename):
         dc = DistanceCalc()
