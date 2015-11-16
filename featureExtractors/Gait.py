@@ -10,7 +10,7 @@ class Gait(FeatureExtractorAbstract):
         self.dc = DistanceCalc()
 
     def getCSVheader(self):
-        return ["gaitPeriodX", "gaitPeriodY", "gaitPeriodZ"]
+        return ["gaitPeriodX", "gaitErrorX", "gaitPeriodY", "gaitErrorY", "gaitPeriodZ", "gaitErrorZ"]
 
     def extract(self, experiment, type, indiv):
         filepath = experiment[2] + os.path.sep + PathConfig.traceFolderNormal + os.path.sep + indiv[0] + ".trace"
@@ -35,14 +35,28 @@ class Gait(FeatureExtractorAbstract):
                 xs.append(linesplit[-3])
                 ys.append(linesplit[-2])
                 zs.append(linesplit[-1])
-
-        return [self._getPeriod(xs), self._getPeriod(ys), self._getPeriod(zs)]
+	
+	xs = map(float,xs)
+	ys = map(float,ys)
+	zs = map(float,zs)
+	xPeriod, xError = self._getPeriod(xs)
+        yPeriod, yError = self._getPeriod(ys)
+	zPeriod, zError = self._getPeriod(zs)
+	return xPeriod, xError, yPeriod, yError, zPeriod, zError
 
     @staticmethod
     def _getPeriod(signal):
         if len(signal) == 0:
             return 'NA'
-        z_fft = np.fft.rfft(signal).real
-        z_fft = z_fft[range(len(z_fft) / 2 + 1)]
-        period = np.argmax(z_fft[1:]) + 1
-        return period
+        signal = np.array(signal)
+        fft = np.fft.rfft(signal).real
+        fft = fft[:len(fft) / 2 + 1]
+        fft[1:] = fft[1:] / (len(signal)/2)
+        fft[0] = fft[0]/len(signal)
+
+        period = np.argmax(fft[1:]) + 1
+        period_value = fft[1:].max()
+      
+        linspace = np.linspace(0,len(signal), len(signal))
+        mse = np.average(signal - (period_value * np.sin(period*linspace+np.average(signal)))**2)
+        return period, mse
