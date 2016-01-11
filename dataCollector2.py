@@ -19,6 +19,8 @@ from featureExtractors.Symmetry import Symmetry
 from featureExtractors.Arc import Arc
 from featureExtractors.Monotony import Monotony
 from featureExtractors.Gait import Gait
+from featureExtractors.ShapeComplexity import ShapeComplexity
+from featureExtractors.CompositionComplexity import CompositionComplexity
 from helpers.config import PathConfig
 
 __author__ = 'meta'
@@ -91,7 +93,9 @@ class DataCollector2:
             Symmetry(),
             Arc(),
             Monotony(),
-            Gait()
+            Gait(),
+            ShapeComplexity(),
+            CompositionComplexity()
         ]
         self.pickleLocation = os.path.dirname(
             os.path.realpath(__file__)) + os.path.sep + ".datacollector2-progress.pickle"
