@@ -3,9 +3,11 @@ from __future__ import division
 from FeatureExtractorAbstract import FeatureExtractorAbstract
 from helpers.getVoxelData import VoxelData
 from scipy.spatial import ConvexHull
+from scipy.ndimage import label
 import numpy as np
 import os
 from helpers.config import PathConfig
+
 
 class ShapeComplexity(FeatureExtractorAbstract):
     
@@ -82,44 +84,11 @@ class ShapeComplexity(FeatureExtractorAbstract):
                     m[x,y,z] = 0
         return m
     
-    def visit_neighbors(self, array, x, y, z, visited, c = 1):
-        
-        if visited[x, y, z] and array[x, y, z]:
-            return visited
-        
-        if not array[x, y, z]:
-            return visited
-        visited[x, y, z] = c
-    
-        if x > 0 and not visited[x-1, y, z]:
-            visited = self.visit_neighbors(array, x-1, y, z, visited, c=c)
-        if x < array.shape[0]-1 and not visited[x+1, y, z]:
-            visited = self.visit_neighbors(array, x+1, y, z, visited, c=c)
-    
-        if y > 0 and not visited[x, y-1, z]:
-            visited = self.visit_neighbors(array, x, y-1, z, visited, c=c)
-        if y < array.shape[1]-1 and not visited[x, y+1, z]:
-            visited = self.visit_neighbors(array, x, y+1, z, visited, c=c)
-    
-        if z > 0 and not visited[x, y, z-1]:
-            visited = self.visit_neighbors(array, x, y, z-1, visited, c=c)
-        if z < array.shape[2]-1 and not visited[x, y, z+1]:
-            visited = self.visit_neighbors(array, x, y, z+1, visited, c=c)
-    
-        return visited
-    
-    
-    def find_islands(self, array):
-        visited = np.zeros_like(array)
-        clusters = 0
-        for x in range(array.shape[0]):
-            for y in range(array.shape[1]):
-                for z in range(array.shape[2]):
-                    if array[x,y,z] and not visited[x,y,z]:
-                        clusters += 1
-                        visited = self.visit_neighbors(array, x,y,z, visited, c = clusters)
-        return clusters, visited
-    
+    def find_islands(self, dnaMatrix):
+        dnaMatrix[dnaMatrix>0] = 1
+        l, n_islands = label(dnaMatrix)
+        return n_islands, l
+
     
     def calc_limbs(self,dnaMatrix):
         centroid = map(int,self.find_centroid(dnaMatrix).tolist())
