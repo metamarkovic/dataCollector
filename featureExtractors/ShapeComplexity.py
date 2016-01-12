@@ -8,8 +8,6 @@ import numpy as np
 import os
 from helpers.config import PathConfig
 
-import sys
-sys.setrecursionlimit(1100)
 
 class ShapeComplexity(FeatureExtractorAbstract):
     
