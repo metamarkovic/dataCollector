@@ -7,6 +7,9 @@ import numpy as np
 import os
 from helpers.config import PathConfig
 
+import sys
+sys.setrecursionlimit(1100)
+
 class ShapeComplexity(FeatureExtractorAbstract):
     
     PCAvector = np.array([ 0.42237685, 0.65776793, 0.62364986])
@@ -83,7 +86,7 @@ class ShapeComplexity(FeatureExtractorAbstract):
         return m
     
     def visit_neighbors(self, array, x, y, z, visited, c = 1):
-        
+                
         if visited[x, y, z] and array[x, y, z]:
             return visited
         
