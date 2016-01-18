@@ -19,7 +19,7 @@ class Gait(FeatureExtractorAbstract):
             filepath = experiment[2] + os.path.sep + PathConfig.traceFoldersAlt[type] + os.path.sep + indiv[
                 0] + ".trace"
             if not os.path.isfile(filepath):
-                return ['NA'] * 3
+                return ['NA'] * 6
 
         with open(filepath) as fh:
             xs = []
@@ -35,7 +35,7 @@ class Gait(FeatureExtractorAbstract):
                 xs.append(linesplit[-3])
                 ys.append(linesplit[-2])
                 zs.append(linesplit[-1])
-	
+
 	xs = map(float,xs)
 	ys = map(float,ys)
 	zs = map(float,zs)
@@ -46,13 +46,14 @@ class Gait(FeatureExtractorAbstract):
 
     @staticmethod
     def _getPeriod(signal):
-        if len(signal) == 0:
-            return 'NA'
+        if len(signal) < 2:
+            return 'NA', 'NA'
         signal = np.array(signal)
         fft = np.fft.rfft(signal).real
         fft = fft[:len(fft) / 2 + 1]
         fft[1:] = fft[1:] / (len(signal)/2)
         fft[0] = fft[0]/len(signal)
+
 
         period = np.argmax(fft[1:]) + 1
         period_value = fft[1:].max()

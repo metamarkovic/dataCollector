@@ -15,7 +15,7 @@ class Monotony(FeatureExtractorAbstract):
             filepath = experiment[2] + os.path.sep + PathConfig.traceFoldersAlt[type] + os.path.sep + indiv[
                 0] + ".trace"
             if not os.path.isfile(filepath):
-                return ['NA']
+                return ['NA'] * 2
         with open(filepath, 'r') as inputFile:
             monotonyUp = 0
             monotonyDown = 0
